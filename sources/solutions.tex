@@ -1,0 +1,180 @@
+\chapter{Solution to the exercises}\label{app:solutions}
+
+\section{Solution to \Cref{sec:basic}}\label{app:solution_basic}
+\begin{Code}[show-output]
+% \usepackage{tabularray} % in the preamble
+\begin{tblr}{|l|c|r|}  % 3 columns, and vertical borders everywhere
+	\hline
+	Hello & tabularray  & world! \\
+	cell  & cell & last table cell \\
+	\hline
+\end{tblr}
+\end{Code}
+
+
+\section{Solution to \Cref{sec:control}}\label{app:solution_control}
+\begin{Code}[show-output]
+\begin{tblr}{colspec={Q[1.5cm]lXX[2,j]}, width=0.8\linewidth}
+	\SetCell[c=2]{c} Region &             & Celebrity                                        & Short bio \\ \hline
+	\SetCell[r=3]{m} Europe & Russia      & \SetCell[r=2]{} {Leonhard Euler \\(1707--1783) } & \SetCell[r=2]{}   One of the greatest mathematicians in history, he also made significant contributions to mechanics, fluid dynamics, optics and astronomy.\\  \hline
+	empty                   & Switzerland & empty                                            & not displayed either \\ \hline
+	& Greece  & {Socrates \\(-470 -- -399)}                          & One of the founders of philosophy. He left no written works; the only record of his thinking comes from his pupils Plato and Xenophon. \\ \hline
+	\SetCell[r=2]{} Asia    & Japan       & {Katsushika Hokusai \\(1760--1849)}              & A painter, draughtsman and printmaker, he is world-renowned for his woodblock print \textit{The Great Wave off Kanagawa}. He had a lasting influence not only on Japanese art, but also on European art (Van Gogh, Monet, Degas, etc.) \\ \hline
+	& India       & {Suśruta \\ (around -600)}                       & He wrote one of the seminal texts on Ayurvedic medicine and made major discoveries in the fields of cataract surgery and plastic surgery. He is regarded as the father of surgery. \\ \hline
+\end{tblr}
+\end{Code}
+
+\section{Solution to \Cref{sec:separations}}\label{app:separations_solution}
+There are several possible solutions.
+\begin{Code}[show-output]
+	\begin{tblr}{
+			hlines,
+			vlines,
+			colsep=8pt,
+			rowsep=6pt,
+			hspan=minimal,
+			vspan=even,
+			colspec={Q[l,2cm,m]lll}
+		}
+		Title & Author & Year & \SetCell[r=2]{} Excerpt \\
+		\SetCell[c=3]{c} Comment & & & \\
+		Les Djinns & Victor Hugo &  1829 & \SetCell[r=2]{m} {Mur, ville,\\ Et port, \\ Asile \\ De mort, \\ Mer grise \\ Où brise \\ La brise, \\Tout dort.} \\
+		\SetCell[c=3]{l} A beautiful poem in which each stanza has a different metrical structure. & & & \\
+		Colloque sentimental & Paul Verlaine & 1869 & \SetCell[r=2]{m} {Dans le vieux parc solitaire et glacé \\ Deux formes ont tout à l'heure passé. \\[1em] Leurs yeux sont morts et leurs lèvres sont molles, \\ Et l'on entend à peine leurs paroles.} \\
+		\SetCell[c=3]{l} A conclusion to the compilation ``Fêtes galantes'' that stands in stark contrast to the rest by its darkness and melancholy. \\
+	\end{tblr}
+\end{Code}
+
+\section{Solution to \Cref{sec:styling}}\label{app:styling_solution}
+
+Not easy! There are, of course, several solutions.
+
+\begin{Code}[show-output]
+\begin{tblr}{
+		colspec = {rcccccc},
+		%
+		% rows
+		row{even[4]} = {gray!20},
+		row{Z[2],Z} = {white}, % overload to avoid gray in the last 2 rows
+		% We could have used row{every[2]{4}{-2}} = {gray!20},
+		% (but we did not see this selector in the tutorial)
+		row{Z} = {font=\bfseries},
+		%
+		% cells 
+		% merging cells
+		cell{1}{even} = {c=2}{c},
+		cell{Z}{even} = {c=2}{c},
+		% Background colours
+		cell{2,Z[2]}{even} = {green!30},
+		cell{2,Z[2]}{odd[3]} = {red!20},
+		% styling for qualified/disqualified
+		cell{qualified} = {green!60!black, fg=white},
+		cell{disqualified} = {red!80!black, fg=white},
+		%
+		% borders
+		hline{2} = {2-Z}{dashed},
+		hline{3},  % empty style means default style
+		hline{Z[3]} = {2pt},
+		vline{4,6} = {2-Z}{},
+	}
+	& Mini &&  Juniors && Seniors &\\
+	& Won & Lost & Won & Lost & Won & Lost \\
+	Day 1 & 2 & 3 & 5 & 1 & 3 & 4 \\
+	Day 2 & 4 & 1 & 2 & 4 & 7 & 0 \\
+	Day 3 & 0 & 5 & 3 & 3 & 3 & 4 \\
+	Day 4 & 2 & 3 & 1 & 5 & 4 & 3 \\
+	Day 5 & 3 & 2 & 5 & 1 & 6 & 1 \\
+	Day 6 & 4 & 1 & 3 & 3 & 2 & 5 \\
+	Total & 15 & 15 & 19 & 17 & 25 & 17 \\
+	Qualified? & \SetChild{class=disqualified}No && \SetChild{class=qualified}Yes && \SetChild{class=qualified}Yes\\
+\end{tblr}
+\end{Code}
+
+Small tip: remember that you cannot have blank lines in the header. However, you can have lines of comments, to keep some distance between each part of your styling.
+
+For comparison, here is the same styling, but exclusively using in-body styling. As you'll see, it's much less pretty.
+
+\begin{Code}
+\begin{tblr}{rcccccc}
+& \SetCell[c=2]{} Mini && \SetCell[c=2]{}Juniors && \SetCell[c=2]{} Seniors &\\ \SetHline{2-Z}{dashed}
+& \SetCell{green9} Won & \SetCell{red9} Lost & \SetVline{2-Z}{} \SetCell{green9} Won & \SetCell{red9} Lost & \SetVline{2-Z}{} \SetCell{green9} Won & \SetCell{red9} Lost \\ \hline
+Day 1 & 2 & 3 & 5 & 1 & 3 & 4 \\
+\SetRow{gray9} Day 2 & 4 & 1 & 2 & 4 & 7 & 0 \\
+Day 3 & 0 & 5 & 3 & 3 & 3 & 4 \\
+\SetRow{gray9} Day 4 & 2 & 3 & 1 & 5 & 4 & 3 \\
+Day 5 & 3 & 2 & 5 & 1 & 6 & 1 \\
+\SetRow{gray9} Day 6 & 4 & 1 & 3 & 3 & 2 & 5 \\ \hline[2pt]
+Total & \SetCell{green9} 15 & \SetCell{red9} 15 & \SetCell{green9} 19 & \SetCell{red9} 17 & \SetCell{green9} 25 & \SetCell{red9} 17 \\
+\textbf{Qualified?} & \SetCell[c=2]{red5, fg=white} \textbf{No} && \SetCell[c=2]{green5, fg=white}\textbf{Yes} && \SetCell[c=2]{green5, fg=white} \textbf{Yes}\\
+\end{tblr}
+\end{Code}
+
+You now understand why it is advised to use header styling as much as possible! If you look at the last two rows, the data are lost in a flood of styling instructions. With this code, good luck for debugging any error...
+
+\section{Solution to \Cref{sec:libraries}}\label{app:libraries_solution}
+
+\begin{Code}[show-output]
+% \usepackage{xcolor}  % in the preamble
+% \UseTblrLibrary{tikz, diagbox}  % in the preamble
+% \usetikzlibrary{fadings}  % in the preamble
+
+\begin{tblrtikzabove}
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(2-2.center) -- (2-10.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(3-3.center) -- (3-12.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(4-3.center) -- (4-7.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(5-5.center) -- (5-12.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(6-3.center) -- (6-10.center);
+\end{tblrtikzabove}
+
+\begin{tblr}{
+		colspec={r|ccccccccccc},
+		rows={15pt},
+		colsep={4pt},
+	}
+	\diagboxthree{Country}{Postquantum \\ migration}{Year} & 2025 & 2026 & 2027 & 2028 & 2029 & 2030 & 2031 & 2032 & 2033 & 2034 & 2035 \\ \hline
+	Australia &&&&&&&&&&&\\ % 2026-2030 
+	ENISA (EU) &&&&&&&&&&&\\ % 2026-2035
+	India &&&&&&&&&&&\\ % 2026-2033
+	NSA (USA)  &&&&&&&&&&&\\ % 2025-2033	
+	United Kingdom &&&&&&&&&&&\\ % 2028-2035
+\end{tblr}
+\end{Code}
+
+The drawing code can be simplified if you know a bit of tikz:
+
+\begin{Code}
+\begin{tblrtikzabove}
+	% We define a reusable style
+	\tikzset{
+		myarrow/.style={
+			red!80!white,
+			line width=5pt,
+			->,
+			path fading=east,
+			postaction={draw, green!80!white, path fading=west}
+		}
+	}
+	
+	\draw[myarrow] (2-2.center) -- (2-10.center);
+	\draw[myarrow] (3-3.center) -- (3-12.center);
+	\draw[myarrow] (4-3.center) -- (4-7.center);
+	\draw[myarrow] (5-5.center) -- (5-12.center);
+	\draw[myarrow] (6-3.center) -- (6-10.center);
+\end{tblrtikzabove}
+\end{Code}
+
+We could also make it so that the code uses semantic numbers (i.e. draw \snippet{(2.2026.center) -- (2-2030.center)} rather than the current code, and even use the library functional to have the years written in the table, then automatically processed and deleted from the output, but this is left as an exercise to the reader.

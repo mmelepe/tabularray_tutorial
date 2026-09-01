@@ -1,0 +1,118 @@
+\chapter{Advanced colspec}\label{app:colspec}
+
+In this tutorial, we saw that \snippet{colspec} could contain information on the colunms and vertical borders of your table. But, just like with native Latex tables, there is more to it. In most cases however, tabularray has a header option that is preferrable.
+
+\section{Column separation}
+
+The directive \snippet{@\{\}} allows to specify what Latex must insert between two columns. For instance, if you want two columns to be separated by \snippet{2cm}, you can write:
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={l\highLight{@{\hspace{2cm}}}cr},
+}
+	a & b & c
+\end{tblr}
+\end{Code}
+
+It is often better to rather use the \snippet{colsep} (margin on both sides), \snippet{leftsep}, \snippet{rightsep} options from tabularray, as they have the advantage of not being completely counter-intuitive: the \snippet{@\{\}} is incompatible with a vertical border, and the extra space does not belong to any column, therefore cannot be styled:
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={l@{\hspace{2cm}}c@{\hspace{2cm}}r},
+	column{1} = {green!20},
+	column{2} = {red!20},
+	column{3} = {blue!20},
+	vline{2}, % will break spacing between the first two columns
+}
+	a & b & c
+\end{tblr}	
+\end{Code}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={lcr},
+	column{1} = {rightsep=1cm, green!20},
+	column{2} = {colsep=1cm, red!20},
+	column{3} = {leftsep=1cm, blue!20},
+	vline{2} = {},  % does not break anything
+}
+	a & b & c
+\end{tblr}
+\end{Code}
+
+\section{Text at the beginning and the end of a cell}
+
+Let us mention the operators \snippet{>\{\}} and \snippet{<\{\}}, who respectively add some text at the beginning and at the end of each cell of the column. Rather than long explanations, here is an example: 
+
+\begin{Code}[show-output]
+\begin{tblr}{\highLight{>{Candidate }}ccc\highLight{<{s}}}
+      & Name   & Time in~\\ \hline
+	1 & Claude & 10.5 \\
+	2 & Mary   & 5.68 \\
+	3 & Jorgen & 12.8 \\
+\end{tblr}
+\end{Code}
+
+Here again, tabularray has the options \snippet{preto} and \snippet{appto} that are preferrable and do same thing in most cases. If you want to add commands with the operators  \snippet{>} and \snippet{<}, you will maybe have to use the option \snippet{cmd} instead. I will let you refer to the documentation for this one.
+
+\section{Several times the same column}
+
+When our table has numerous columns, writing dozens of times the same instruction in the colspec can quickly become repetitive. Luckily, you can replace this by, for instance, \snippet{*\{3\}\{c|Q[l,2cm]\}}, which is the same thing as \snippet{c|Q[l,2cm]c|Q[l,2cm]c|Q[l,2cm]}.
+Here is an example, with as a bonus a use of the option \snippet{cmd} that we talked about just above.
+
+\begin{Code}
+\documentclass{standalone}
+\usepackage{tabularray, xcolor, ninecolors}
+\usepackage{adjustbox}  % for \adjustbox that rotates a textbox
+\usepackage{bbding}  % for \Checkmark and \XSolidBrush
+\newcommand{\yes}{\textcolor{green!70!black}{\Checkmark}}
+\newcommand{\no}{\textcolor{red!50}{\XSolidBrush}}
+
+\begin{document}
+\begin{tblr}{
+	colspec={Q[2cm,r,m]\highLight{*{27}{c}}},  % One 2cm column, and 27 centered ones
+	columns = {font={\small},colsep=3.5pt},
+	row{1} = {cmd=\adjustbox{angle=45,lap=\width-(1em)}},
+	% the cmd option applies the command adjustbox (rotation) to every cell in the first row
+}
+	& Austria & Belgium & Bulgaria & Croatia & Cyprus & Czechia & Denmark & Estonia & Finland & France & Germany & Greece & Hungary & Ireland & Italy & Latvia & Lithuania & Luxembourg & Malta & Netherlands & Poland & Portugal & Romania & Slovakia & Slovenia & Spain & Sweden
+	Eurozone & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \no & \yes & \yes & \no & \no \\
+	Schengen Area & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \\ 
+	European Economic Area & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \\ 
+\end{tblr}
+\hspace{2em} % a bit of extra space to avoid cutting the end of our table
+\end{document}
+\end{Code}
+
+Will give:
+
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{
+	colspec={Q[2cm,r,m]*{27}{c}},  % One 2cm column, and 27 centered ones
+	columns = {font={\small},colsep=3.5pt},
+	row{1} = {cmd=\adjustbox{angle=45,lap=\width-(1em)}},
+	% the cmd option applies the command adjustbox (rotation) to every cell in the first row
+}
+	& Austria & Belgium & Bulgaria & Croatia & Cyprus & Czechia & Denmark & Estonia & Finland & France & Germany & Greece & Hungary & Ireland & Italy & Latvia & Lithuania & Luxembourg & Malta & Netherlands & Poland & Portugal & Romania & Slovakia & Slovenia & Spain & Sweden \\
+	Eurozone & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \no & \yes & \yes & \no & \no \\
+	Schengen Area & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \no & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \\ 
+	European Economic Area & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \yes & \\ 
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+\section{No colspec}
+
+I have to confess something: the colspec option is not mandatory. As a matter of fact, tabularray computes the table structure from the ampersands \snippet{\&} in each row. Moreover, in case of conflict between the colspect and the table body, the table body wins (remember the priority rules!).
+
+\begin{Code}
+\begin{tblr}\highLight{{}}  % also works
+	Hello & tabularray & world! \\
+	cell & other cell & last cell \\
+\end{tblr}
+\end{Code}
+
+The colspec option is essentially useful to give the reader a quick indication about the table structure, and is also useful for applying basic styling to each column. I strongly encourage you to always write the colspec, but know that if there are not enough columns in the compiled table, it's probably because you forgot a few \snippet{\&} somewhere!
+
+Finally, the colspec is mandatory with native Latex tables, so if one day you have to migrate your tables back to native, you will know what to do.

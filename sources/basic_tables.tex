@@ -1,0 +1,227 @@
+\chapter{Creating a basic table}\label{sec:basic}
+
+\section{Your first tabularray table}
+Let's start from the beginning, with a simple example that we will be able to analyse in detail. 
+In order to use tabularray in your Latex file, you simply have to include the package in the document preamble. 
+
+\begin{Code}
+\documentclass{article}  % or any other documentclass
+\usepackage{tabularray}
+
+\begin{document}
+  % Your tabularray table here
+\end{document}
+\end{Code}
+
+The example below shows a minimal table example, with 2 rows and 3 columns, and centered text in each cell:
+
+% TODO use a tcblisting for having the \begin{document} in the first snippet?
+\begin{Code}[show-output]
+\begin{tblr}{ccc}
+	Hello & tabularray & world! \\
+	cell & other cell & last cell \\
+\end{tblr}
+\end{Code}
+
+\begin{warningbox}{Compilation error?}
+If the above example does not compile on your machine, it is probable that your Latex distribution is not up to date or that tabularray is not installed. Please refer to the FAQ in \Cref{app:version} to update your distribution.
+
+Moreover, many examples and functionalities in this tutorial rely on the 2025A version. All examples might not work with your current tabularray version, please refer to \Cref{app:version} in case of doubt.
+\end{warningbox}
+
+For the moment, our table is ugly, but that's a problem for later \emoji{smiley}. Let's analyze our code piece by piece:
+
+\begin{itemize}
+    \item \snippet{\textbackslash begin\{tblr\}} and \snippet{\textbackslash end\{tblr\}} indicate the beggining and the end of the table, respectively.
+    \item Columns are specified directly after the \snippet{\textbackslash begin\{tblr\}}, between two curly braces \snippet{\{\}}. Here, we want three columns with horizontally centered text (type \snippet{c}, we will see other types later on), which gives us \snippet{\{ccc\}}.
+    \item Table data itself. You just have to write the contents of our table, using the following two formatting tools:
+    \begin{itemize}
+        \item \snippet{\&} for separating successive cells in the same row;
+        \item \snippet{\textbackslash\textbackslash} to indicate the end of the row.
+    \end{itemize}
+\end{itemize}
+
+A cell can contain any kind of text, images, mathematical code, and many other things, or even nothing at all. The two things to remember are that a cell is separated from the next cell by the ampersand \snippet{\&} and that you must ensure there is the correct number of cells in a row (otherwise, the result might be unexpected).
+
+\begin{questionbox}{}
+What if I want to use \snippet{\&} or \snippet{\textbackslash\textbackslash} in my table?
+\end{questionbox}
+
+That is very much feasible, you just have to escape the characters, as usual in Latex:
+
+\begin{Code}[show-output]
+\begin{tblr}{cc}
+	\&                           & cell separator \\
+	\textbackslash\textbackslash & row separator \\
+\end{tblr}
+\end{Code}
+
+Note that in this code snippet, the ampersands were aligned so that the table structure was directly visible in the Latex source code. This is not mandatory and changes nothing to the final rendered table (surrounding spaces are ignored by Latex as a general rule), but it's more practical when you are editing your table. It is a good habit to catch!
+
+You obviously can create a table with any number of rows and columns. The only important thing is to specify the correct number of columns just after \snippet{\textbackslash begin\{tblr\}} and to use \snippet{\textbackslash\textbackslash} to indicate the next row.
+
+For instance, the code below will give the expected result (but definitely not a balanced diet):
+
+\begin{Code}[show-output]
+\begin{tblr}{cccccccc}  % 8 centered columns
+	       & Monday   & Tuesday  & Wednesday & Thursaday & Friday   & Saturday & Sunday \\
+	Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
+	Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers \\
+\end{tblr}
+\end{Code}
+
+Note that the first cell is empty, that's why there is no text before the first \snippet{\&}. But you \emph{must} keep the \snippet{\&} in the code, otherwise everything would be shifted (give it a try).
+
+\section{Column alignment}
+
+Until now, we always used horizontally centered columns. But there are other column types!
+
+\begin{itemize}
+\item columns of type \textbf{c}, which will \textbf{c}enter the text
+\item columns of type \textbf{l}, which will align the text to the \textbf{l}eft
+\item columns of type \textbf{r}, which will align the text to the \textbf{r}ight
+\item columns of type \textbf{j}, which will \textbf{j}ustify the text in multiline cells (we will see how to do that later).
+\end{itemize}
+
+%You can combine several kinds of columns in the same table.
+
+\begin{Code}[show-output]
+\begin{tblr}{rlcc}  % 1 right align, 1 left, 2 center
+	Surname       & Name           & Grade   & Comment \\
+	Jean-Pierre   & Dupuis         & 13/20   & Good progress this semester.\\
+	Marie         & Pranel--Mathon & 11/20   & You need to work more! \\
+	Brahim        & Sarou          & 15/20   & Very good work, congrats! \\
+\end{tblr}
+\end{Code}
+
+\section{Adding horizontal and vertical borders}
+Until now, our tables are hopelessly ugly \emoji{frowning-face}, notably becayse we are not yet using any borders. 
+Fortunately, vertical and horizontal borders are very easy to add to your table! 
+
+\begin{itemize}
+\item For horizontal borders, you need to write \snippet{\textbackslash hline} at the row where you want the border (before the row for a border above, after the row for a border below)
+\item For vertical borders, they can be defined within the column specification. For instance, instead of writing \snippet{\{rlcc\}}, one can write \snippet{\{|rl|cc|\}}, where each vertical pipe \snippet{|} indicates a vertical border. Thus, the colspec \snippet{\{|rl|cc|\}} will create a vertical border before the first column, between the second and third columns, and after the fourth column.
+\end{itemize}
+
+\begin{Code}[show-output]
+\begin{tblr}\highLight{{|rl|cc|}}  % some vertical borders
+	\highLight{\hline}  % horizontal border before the first row
+	Surname       & Name           & Grade   & Comment \\ 
+	\highLight{\hline}  % another
+	Jean-Pierre   & Dupuis         & 13/20   & Good progress this semester.\\
+	Marie         & Pranel--Mathon & 11/20   & You need to work more! \\
+	Brahim        & Sarou          & 15/20   & Very good work, congrats! \\
+	\highLight{\hline}  % a last border
+\end{tblr}
+\end{Code}
+
+Of course, you can add borders wherever you want, and as many as you want. You can even use double, triple or even more borders, even though it becomes quickly unreadable.
+
+%
+%\begin{Code}[show-output]
+%\begin{tblr}\highLight{{|rl||cc|}}  % double border
+%	\hline
+%	Surname       & Name           & Grade   & Comment \\ 
+%	\hline
+%	Jean-Pierre   & Dupuis         & 13/20   & Good progress this semester.\\
+%	Marie         & Pranel--Mathon & 11/20   & You need to work more! \\
+%	Brahim        & Sarou          & 15/20   & Very good work, congrats! \\
+%	\hline
+%\end{tblr}
+%\end{Code}
+
+\begin{warningbox}{Love is without borders}
+Do not overuse borders! A clean, uncluttered table is much easier to read than one with borders everywhere. To give you an example, what do you prefer between 
+
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{colspec={|rl||cc|}, hlines, vlines}   
+	Surname       & Name           & Grade   & Comment \\ 
+	\hline
+	Jean-Pierre   & Dupuis         & 13/20   & Good progress this semester.\\
+	Marie         & Pranel--Mathon & 11/20   & You need to work more! \\
+	Brahim        & Sarou          & 15/20   & Very good work, congrats! \\
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+and
+
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{colspec={rlcc}}   
+	Surname       & Name           & Grade   & Comment \\ 
+	\hline
+	Jean-Pierre   & Dupuis         & 13/20   & Good progress this semester.\\
+	Marie         & Pranel--Mathon & 11/20   & You need to work more! \\
+	Brahim        & Sarou          & 15/20   & Very good work, congrats! \\
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+It is up to you to decide how many borders are too many. General recommandations are: 
+
+\begin{itemize}
+\item Do not use double borders
+\item Avoid vertical borders as much as possible\footnote{There are people who find vertical borders unprofessional. I would not go this far, but I do agree that most of vertical borders are useless anyways.}
+\item Limit the number of borders, usually three horizontal lines (before the first row, after the first row, and after the last row) are enough
+\item Left alignment is often a good idea.
+\end{itemize}
+
+More information in the folllowing guide: \url{https://people.inf.ethz.ch/markusp/teaching/guides/guide-tables.pdf}. In this tutorial, we will use a lot of vertical borders, but mostly because they are useful to show where a cell ends. In general, it is better to stick with the rule of no vertical border.
+\end{warningbox}
+
+\section{Compatibility with native Latex tables}
+In this tutorial, we will only deal with tabularray tables. But many people still use native Latex tables. Good news: everything we saw until here is also valid for native Latex tables (except the \snippet{j} column type). The only difference is that native tables use the environment \snippet{\textbackslash begin\{tabular\}} and \snippet{\textbackslash end\{tabular\}} rather than \snippet{tblr}, and do not require to load any external library.
+
+Now, the same code will produce a more pleasant table in tabularray, and all the functionalities we will see afterwards are much easier to invoke in tabularray than in native tables and the army of packages we would need otherwise.
+
+Let us have a comparison between a native and a tabularray table:
+
+\begin{Code}[show-output]
+\begin{tabular}{ccc}
+	Owner   & Floor & Portion \\
+	\hline
+	Dumont  & 0     & $\frac{150}{1000}$ \\
+	Gosso   & 1     & $\frac{200}{1000}$ \\
+	Carrier & 1     & $\frac{150}{1000}$ \\
+	Dumont  & 2     & $\frac{300}{1000}$ \\
+	Montrin & 3     & $\frac{200}{1000}$ \\
+\end{tabular}
+
+\hspace{1em}  % horizontal separation
+
+\begin{tblr}{ccc}
+	Owner   & Floor & Portion \\
+	\hline
+	Dumont  & 0     & $\frac{150}{1000}$ \\
+	Gosso   & 1     & $\frac{200}{1000}$ \\
+	Carrier & 1     & $\frac{150}{1000}$ \\
+	Dumont  & 2     & $\frac{300}{1000}$ \\
+	Montrin & 3     & $\frac{200}{1000}$ \\
+\end{tblr}
+\end{Code}
+
+You’ll appreciate tabularray straight away \emoji{grinning}. In the rest of this tutorial, we will look at commands that are specific to tabularray and which are no longer compatible with Latex’s native tables.
+
+\begin{infobox}{TL;DR}
+\begin{itemize}
+    \item A tabularray table is similar to native Latex tables, and is declared with the \snippet{\textbackslash begin\{tblr\}} and \snippet{\textbackslash end\{tblr\}} environment (do not forget to add \snippet{\textbackslash usepackage\{tabularray\}} in the preamble!).
+    \item You must specify the type of each column (\snippet{l}, \snippet{c}, \snippet{r} or \snippet{j}) and separate each cell by \snippet{\&}, and each row by \snippet{\textbackslash\textbackslash}.
+    \item Horizontal borders are specified with \snippet{\textbackslash hline}. Vertical borders are added in the colspec with pipes \snippet{|}, for instance the colspec \snippet{c|lr} will add a vertical border between the \snippet{c} and \snippet{l} columns.
+\end{itemize}
+
+\textbf{\underline{Exercise}}: can you recreate the following table? Pay attention to the columns alignment.
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{|l|c|r|}
+   \hline
+   Hello & tabularray  & world! \\
+   cell  & cell & last table cell \\
+   \hline
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+The solution is in \Cref{app:solution_basic}
+\end{infobox}

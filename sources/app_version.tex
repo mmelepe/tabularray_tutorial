@@ -1,0 +1,62 @@
+\chapter{Check your latex version}\label{app:version}
+
+tabularray is a recent package (2021), and might not be present in your installation if it is a bit old. Moreover, package managers who favour stability over new fancy stuff might not ship the latest versions. For instance, at the time of writing of this document Debian bookworm only offers TexLive2022, and thus only the oldest versions of tabularray.
+
+\section{I use TeXLive, but which version?}
+You can check your TeXLive version with the command \snippet{tlmgr --version}, which should return something of the like:
+
+\begin{verbatim}
+tlmgr --version
+# tlmgr revision 76773 (2025-11-06 20:43:29 +0100)
+# tlmgr using installation: /usr/local/texlive/2025
+# TeX Live (https://tug.org/texlive) version 2025
+\end{verbatim}
+
+Which, in this case, means that you are using TeXLive 2025.
+
+In order to update your TeXLive version, use the command \snippet{tlmgr update --all}. With MacOS, you should have a graphical interface with the tool \snippet{Tex Live Utility}.
+
+\section{I am using MikTeX, but which version?}
+
+MikTeX versions matter much less, because you can always update the current one. For instance, after launching the MikTeX console, in the folder \snippet{Updates}, then \snippet{Check for Updates}, you can update your distribution, as well as your tabularray version.
+
+\section{I use Overleaf, how does it work?}
+
+Overleaf uses TeXLive. To change your TeXLive distribution, click on the \snippet{Settings} icon at the bottom left of your workspace, then \snippet{Compiler}, and chose the version you want.
+
+\section{I think that my Latex version is up-to-date, how can I check my tabularray version?}
+
+Either with your Latex package manager (for instance MikTex allows you to right-click on the package, then click ``infos''), either by compiling the following document:
+
+\begin{Code}
+\documentclass{article}
+\usepackage{tabularray}
+
+\listfiles
+
+\begin{document}
+	non-empty document
+\end{document}	
+\end{Code}
+
+In the compilation logs (a file that ends in \snippet{.log}, or, in Overleaf, by clicking on \snippet{Raw logs}), you will see a lot of text, and at the end of the file, something that looks like 
+
+\begin{verbatim}
+{C:/Users/You/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] (document.aux)
+***********
+LaTeX2e <2026-06-01>
+L3 programming layer <2026-05-26>
+***********
+
+
+*File List*
+article.cls    2025/01/22 v1.4n Standard LaTeX document class
+size10.clo    2025/01/22 v1.4n Standard LaTeX file (size option)
+tabularray.sty    2025-11-27 v2025C Typeset tabulars and arrays with LaTeX3
+l3backend-pdftex.def    2026-02-18 L3 backend support: PDF output (pdfTeX)
+***********
+
+)
+\end{verbatim}
+
+Which allows you to conclude that, in this case, you have tabularray installed in version 2025C.

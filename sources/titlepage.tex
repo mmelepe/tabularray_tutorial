@@ -1,0 +1,211 @@
+\definecolor{tblblue}{HTML}{2563EB}
+\definecolor{tblcyan}{HTML}{06B6D4}
+\definecolor{tblgray}{HTML}{64748B}
+
+% Background table styles
+\tikzset{
+	bgtable/.style={
+		text opacity=0.65
+	},
+}
+
+
+\newgeometry{
+	left=0mm,
+	right=0mm,
+	top=0mm,
+	bottom=0mm
+}
+
+\thispagestyle{empty}
+
+\begin{tikzpicture}[remember picture,overlay]
+	
+	% ----------------------------------------------------------
+	% Background
+	% ----------------------------------------------------------
+	\fill[tblblue!7] (current page.south west) rectangle (current page.north east);
+	
+	\fill[tblblue!5]
+	(current page.south east)
+	-- (current page.north east)
+	-- ([xshift=-8cm,yshift=-7cm]current page.north east)
+	-- cycle;
+	
+	% ----------------------------------------------------------
+	% Background table 1
+	% ----------------------------------------------------------
+	\node[bgtable, rotate=7]
+	at ([xshift=-6.0cm,yshift=6.0cm]current page.south east)
+	{
+		\begin{tblrtikzabove}
+			% ----------------------------------------------------
+			% Status dots
+			% ----------------------------------------------------
+			\fill[tblblue!52] (2-2.center) circle (2pt);
+			\fill[tblblue!81] (3-2.center) circle (2pt);
+			\fill[tblblue!94] (4-2.center) circle (2pt);
+			\fill[tblblue!86] (5-2.center) circle (2pt);
+			
+			% ----------------------------------------------------
+			% Percentage bars
+			% ----------------------------------------------------
+			\fill[tblblue!52, rounded corners=2pt] (2-3.south west) rectangle ($(2-3.north west)!0.52!(2-3.north east)$);
+			\fill[tblblue!81, rounded corners=2pt] (3-3.south west) rectangle ($(3-3.north west)!0.81!(3-3.north east)$);
+			\fill[tblblue!94, rounded corners=2pt] (4-3.south west) rectangle ($(4-3.north west)!0.94!(4-3.north east)$);
+			\fill[tblblue!86, rounded corners=2pt] (5-3.south west) rectangle ($(5-3.north west)!0.86!(5-3.north east)$);
+			
+			% ----------------------------------------------------
+			% Highlight best row
+			% ----------------------------------------------------
+			\draw[tblcyan, rounded corners=2pt]
+			([xshift=-2pt,yshift=2pt]4-1.north west) rectangle ([xshift=2pt,yshift=-2pt]4-4.south east);
+		\end{tblrtikzabove}
+		
+		\begin{tblr}{
+			colspec={Q[l,1.5cm] Q[c,0.5cm] Q[l,2.3cm] Q[c]},
+			row{1}={tblblue!30, font=\sffamily\bfseries\scriptsize},
+			row{2-Z}={font=\sffamily\scriptsize},
+			rowsep=5pt,
+			hline{1,Z}={1pt,tblblue!50},
+		}
+			Year & & Attendance & City \\
+			2023 & & 72\% & The Hague \\
+			2024 & & 81\% & Ho Chi Minh City \\
+			2025 & & \textbf{94\%} & Milano\\
+			2026 & & 86\% & Córdoba
+		\end{tblr}
+	};
+	
+	% ----------------------------------------------------------
+	% Background table 2
+	% ----------------------------------------------------------
+	\node[bgtable, rotate=-8]
+	at ([xshift=-3.5cm,yshift=0.5cm]current page.east)
+	{
+		\begin{tblr}{
+			colspec={Q[1.4cm]Q[1.8cm]Q[1.8cm]},
+			rows={ht=0.5cm},
+			cells={font=\sffamily\scriptsize},
+			row{1}={tblcyan!30, font=\sffamily\bfseries\scriptsize},
+			hline{1,2,Z}={tblcyan!25},
+			vline{1,Z}={tblcyan!20}
+		}
+			Product & Category & Price \\
+			\SetCell[r=2]{m} Widget A & Tools & 19.95 \\
+			& Books & 29.50 \\
+			Widget C & Software & 49.00 \\
+			Widget D & Hardware & 12.75
+		\end{tblr}
+	};
+	
+	% ----------------------------------------------------------
+	% Background table 3
+	% ----------------------------------------------------------
+	
+	% TODO Seems that there is a bug somewhere because the styling of the last column is not working
+	\node[bgtable, rotate=5]
+	at ([xshift=3.5cm,yshift=-2.5cm]current page.north)
+	{
+		\begin{tblr}{
+			colspec = {lcccc},
+			cells = {font=\scriptsize\sffamily},
+			cell{1}{3,5} = {c=2}{c},        
+			hline{2} = {3-4}{leftpos=-1,rightpos=-1,endpos=true,dotted},
+			hline{2} = {5-6}{leftpos=-1,rightpos=-1,endpos=true,dotted},
+		}
+			&& Women && Men & \\
+			&& Score & Confidence & Score & Confidence \\ \hline
+			\SetCell[r=3]{m}Geometry & trig5      & 8.2 & 0.91 & 7.8 & 0.88 \\
+			& trig8      & 7.4 & 0.87 & 6.9 & 0.81 \\
+			& vision      & 6.7 & 0.84 & 7.3 & 0.89 \\ \hline[dotted,endpos=true,leftpos=-1,rightpos=-1]
+			\SetCell[r=2]{m} Other    & semtest    & 9.1 & 0.95 & 8.6 & 0.92 \\
+			& align      & 5.9 & 0.76 & 6.5 & 0.80 \\ \hline
+		\end{tblr}
+	};
+	
+	% ----------------------------------------------------------
+	% Background table 4
+	% ----------------------------------------------------------
+	\node[bgtable, rotate=-5]
+	at ([xshift=3.5cm,yshift=8.5cm]current page.south west)
+	{
+		\begin{tblr}{
+			colspec={Q[l,m]|ccc},
+			column{1} = {2cm},
+			row{1}={tblcyan!20, font=\sffamily\bfseries\scriptsize},
+			row{even} = {gray!30},
+			row{odd[3]} = {gray!5},
+			cells={font=\sffamily\scriptsize},
+			hline{1,2,Z},
+			vline{1,Z},
+		}
+			Feature & Basic & Pro & Elite \\
+			Private rooms & \Checkmark & \Checkmark & \Checkmark \\
+			Customization & \Checkmark & \Checkmark & \Checkmark \\
+			Software updates & -- & \Checkmark & \Checkmark \\
+			Customer support & -- & \Checkmark & \Checkmark \\
+			Advanced monitoring & -- & -- & \Checkmark
+		\end{tblr}
+	};
+	
+	
+	% ----------------------------------------------------------
+	% Central white panel
+	% ----------------------------------------------------------
+	\fill[white, fill opacity=0.6, rounded corners=8pt]
+		([xshift=2cm,yshift=12cm]current page.south west)
+		rectangle
+		([xshift=-2cm,yshift=-3cm]current page.north east);
+	
+	
+	% % ----------------------------------------------------------
+	% % "MANUAL" label
+	% % ----------------------------------------------------------
+	% \node[
+	%   anchor=west,
+	%   font=\sffamily\bfseries\small,
+	%   text=tblblue,
+	% ]
+	%   at ([xshift=3.0cm,yshift=-5.1cm]current page.north west)
+	%   {Tutorial};
+	
+	% ----------------------------------------------------------
+	% Main title
+	% ----------------------------------------------------------
+	\node[anchor=west, font=\sffamily\bfseries\Huge]
+		at ([xshift=3cm,yshift=-6.5cm]current page.north west)
+		{\ManualTitle};
+	
+	% ----------------------------------------------------------
+	% Subtitle
+	% ----------------------------------------------------------
+	\node[anchor=north west, text=tblgray, font=\sffamily\LARGE, text width=11.5cm,	align=left]
+		at ([xshift=3cm,yshift=-7.5cm]current page.north west)
+		{\ManualSubtitle};
+	
+	
+	% ----------------------------------------------------------
+	% Author / version information
+	% ----------------------------------------------------------
+	\node[anchor=north west, font=\sffamily\small]
+		at ([xshift=6cm,yshift=-11cm]current page.north west)
+		{Author: \textbf{\ManualAuthor}};
+	
+	\node[anchor=north west, text=tblgray, font=\sffamily\small]
+		at ([xshift=6cm,yshift=-11.5cm]current page.north west)
+		{\ManualVersion\quad\textbullet\quad Compiled \CompilationDate};
+	
+	\node[anchor=south east, text=tblgray, font=\sffamily\footnotesize, text width=11.7cm, align=right]
+		at ([xshift=-1cm,yshift=0.5cm]current page.south east)
+		{\textbf{WTFPL 2}\\[2pt] This document is licensed under the Do What The Fuck You Want Public License 2.};
+	
+	\node[anchor=south west, text=tblgray, font=\sffamily\footnotesize, align=left]
+		at ([xshift=2.5cm,yshift=12cm] current page.south west)
+		{
+			Lastest version on Github: \LatestVersion \\
+			French version: \FrenchVersion
+		};
+\end{tikzpicture}
+
+\restoregeometry

@@ -1,0 +1,366 @@
+\chapter{Control the cells and columns}\label{sec:control}
+
+We saw that there were 4 types of columns. Actually, I lied: there is only one type of column! It's the column \snippet{Q}. This column can receive a ton of optional parameters (between square brackets \snippet{[]}). For instance:
+
+\begin{itemize}
+	\item \snippet{Q[l]} is a left-aligned column
+	\item \snippet{Q[c]} is a centered column
+	\item \snippet{Q[r]} is a right-aligned column
+	\item \snippet{Q[j]} is a justified column
+\end{itemize}
+
+By default, \snippet{Q} (without any option) is a justified column, and thus is equivalent to \snippet{Q[j]}.
+
+\begin{infobox}{}
+	The columns \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} that we saw in the previous chapter are aliases of \snippet{Q[l]}, \snippet{Q[c]}, \snippet{Q[r]}, \snippet{Q[j]}, respectively.
+\end{infobox}
+
+You'll ask me what's the point? The idea of keeping the \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} is retro-compatibility with native Latex table (it's also faster to type and easier for a human to parse). The idea of the \snippet{Q} syntax is that we can also pass it numerous other options, that we will see just now.
+
+\section{Control column width}
+
+First of all, if you experimented a bit on your own, you might have noticed that the width of a column depends on its contents: if one cell is very large, then its column will be very large. In extreme cases, your table will overflow!
+
+\begin{Code}[show-output]
+\begin{tblr}{|l|l|l|}
+	Pseudo & Comment & Date \\ \hline
+	melepe & Amazing! & Yesterday\\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}{|l|l|l|}
+	Pseudo & Comment & Date \\ \hline
+	melepe & Amazing! & Yesterday \\
+	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
+\end{tblr}
+\end{Code}
+
+On one hand, it's practical when your text has a reasonable length, because you don't have to compute the column width on your own. On the other hand, you cannot have long text in such tables. 
+
+Instead, tabularray offers the possibility to specify a column width: in centimeters (\snippet{cm}), points (\snippet{pt}), or any other Latex measuring unit (see \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}). You don't know which one to chose? Keep it simple and use centimeters.
+
+To define a column width, simply write it in the column's options. For instance, \snippet{Q[4cm]} defines a 4cm wide column. We can of course mix horizontal alignment options too, for instance \snippet{Q[l, 4cm]}. 
+Let's see it in action:
+
+\begin{Code}[show-output]
+\begin{tblr}{|l|Q[l]|l|}  % Same table as previously, but we use a Q[l]
+	Pseudo & Comment & Date \\	\hline
+	melepe & Amazing! & Yesterday\\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}{|l|\highLight{Q[l,4cm]}|l|}  % Column will be 4cm even if the text is too short
+	Pseudo & Comment & Date \\ \hline
+	melepe & Amazing! & Yesterday\\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}{|l|\highLight{Q[l,4cm]}|l|}  % Column will be 4cm even if the text is too long
+	Pseudo & Comment & Date \\ \hline
+	melepe & Amazing! & Yesterday \\
+	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
+\end{tblr}
+\end{Code}
+
+Now you know in which context the \snippet{j} column can be relevant.
+
+\section{Control column vertical alignment}
+
+Now that we have multiline cells, we must take into account vertical alignment. In the examples above, we see that the text is aligned at the top of the cells. 
+
+Let's start with two placement options: 
+
+\begin{itemize}
+	\item At the top of the cell, with the option \snippet{h} (for \textbf{h}ead)
+	\item At the end of the cell, with the option \snippet{f} (for \textbf{f}oot)
+\end{itemize}
+
+This option must be passed as an argument to the column \snippet{Q}. It can of course be cumulated with the options we saw before.
+
+\begin{Code}[show-output]
+\begin{tblr}{|\highLight{Q[f,l]}|Q[4cm]|l|} 
+	% No horizontal alignment given for the second column so the default option (j) applies.
+	Pseudo & Comment & Date \\
+	\hline
+	melepe & Amazing! & Yesterday \\
+	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
+\end{tblr}
+\end{Code}
+
+The default value for vertical alignment is... neither of these two values \emoji{grinning}. By default, text is aligned on what we call the \emph{baseline}.
+
+There are three possible placements of the baseline:
+
+\begin{itemize}
+	\item Under the first line of the text block, using the \textbf{t} option (\textbf{t}op). This is the default option
+	\item Under the last line of the text block, using the \textbf{b} option (\textbf{b}ottom)
+	\item In the \textbf{m}iddle between the top and bottom lines, using the \textbf{m} option 
+\end{itemize}
+
+\begin{Code}
+\begin{tblr}{|l|\highLight{Q[b,4cm]}|l|}
+	Pseudo & Comment & Date \\
+	\hline
+	melepe & Amazing! & Yesterday \\
+	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
+\end{tblr}
+\end{Code}
+
+Will render like so (I added the baseline in red):
+\begin{center}
+\begin{standalonebox}
+% base anchor is at the baseline level
+\begin{tblrtikzabove}
+	\draw[red, dashed, thick] (3-1.base west) -- (3-3.base east);
+\end{tblrtikzabove}
+
+\begin{tblr}{|l|Q[b,4cm]|l|}
+	Pseudo & Comment & Date \\
+	\hline
+	melepe & Amazing! & Yesterday \\
+	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+It's so simple, and yet, compared to the hell you need to go through to get the same result with native Latex tables, it's a revolution!
+
+\begin{warningbox}{Baseline alignment is not text alignment}
+	Be careful, as we said the vertical alignment will align the \emph{baseline}, not the text itself. This will give counter-intuitive results when several cells are multiline.
+	
+\begin{Code}
+\begin{tblr}{|Q[2cm,b]|Q[2cm,t]|Q[2cm,m]|}
+\hline
+baseline set to b & baseline set to t & baseline set to m \\
+\hline
+\end{tblr}
+\end{Code}
+Will render as so (I added the baseline in red):
+
+\begin{center}
+\begin{standalonebox}
+\begin{tblrtikzabove}
+	\draw[red, dashed, thick] (1-1.base west) -- (1-3.base east);
+\end{tblrtikzabove}
+\begin{tblr}{|Q[2cm,b]|Q[2cm,t]|Q[2cm,m]|}
+	\hline
+	baseline set to b & baseline set to t & baseline set to m \\
+	\hline
+\end{tblr}
+\end{standalonebox}
+\end{center}
+\end{warningbox}
+
+Combining every possible option into one table, we get the following result.
+
+\begin{Code}[show-output]
+\begin{tblr}{|Q[2cm,b]|Q[2cm,t]|Q[2cm,m]|Q[2cm,m]|Q[2cm,h]|Q[2cm,f]|}
+	\hline
+	baseline set to b & baseline set to t & baseline set to m with a lot of text that is going on forever & baseline set to m & placement with h & placement with f\\ \hline
+\end{tblr}
+\end{Code}
+
+Note that options \snippet{h} and \snippet{b} are not equivalent, and neither are \snippet{f} and \snippet{t}.
+
+\section{Multiline cells}
+Sometimes, it is useful to write several lines in a cell, and deciding yourself where you want the line break. For this, there is a very simple solution: put the cell text in-between curly braces \snippet{\{\}}, and now you are able to use the Latex command for linebreak: \snippet{\textbackslash\textbackslash}. 
+
+\begin{Code}[show-output]
+	\begin{tblr}{lll}
+		Country    & Capital(s)             & Comment \\ \hline
+		Belize     & Belmopan                & N/A \\
+		Bénin      & \highLight{{Porto-Novo \\ Cotonou}} & \highLight{{Official capital \\ De facto administrative capital}}\\
+		Bhutan & Thimphu                 & N/A \\
+	\end{tblr}
+\end{Code}
+
+Of course, multiline cells can be horizontally or vertically aligned. In the following example, observe how ``Bénin'' is now vertically centered with the rest of the row.
+
+\begin{Code}[show-output]
+	\begin{tblr}\highLight{{lQ[l,m]Q[l,m]}}
+		Country    & Capital(s)             & Comment \\ \hline
+		Belize     & Belmopan                & N/A \\
+		Bénin      & {Porto-Novo \\ Cotonou} & {Official capital \\ De facto administrative capital}\\
+		Bhutan & Thimphu                 & N/A \\
+	\end{tblr}
+\end{Code}
+
+\section{Columns spanning all the available space}
+
+tabularray also has another column, the column \snippet{X}\footnote{This column is also an alias of the column \snippet{Q}, more specifically is an alias of \snippet{Q[co=1]}. But it's often easier to use the \snippet{X} notation, in resemblance to tabularx package. The \snippet{X} column notation also accepts optional arguments, e.g. \snippet{X[l,m]}.}. An \snippet{X} column will calculate the remaining free space available across the page width, and automatically fill this space. If there are several \snippet{X} columns in the table, the space is equally distributed over these columns, meaning they will all have the same width.
+
+\begin{Code}[show-output]
+% Reference table
+\begin{tblr}{ll|l|l|}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}\highLight{{ll|X|X|}}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+
+If you don't want the table to span over the whole page width, but still want to use  \snippet{X} columns, you just have the specify the desired total width in the table header and tabularray will manage. Small but important detail, now that there are several arguments in the header (the column specification and the table width), the colspec must be specified using the keyword \snippet{colspec=\{...\}}.
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	\highLight{width=0.7\linewidth,}  % 70 % of maximum line width. One can also input a value in cm, pt or whatever.
+	colspec={ll|X|X|},
+}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+
+\begin{errorbox}{Blank lines and tabularray}
+There cannot be blank lines in a tabularray header, it would break compilation. For instance, the following table will generate a compilation error:
+
+\begin{Code}
+\begin{tblr}{
+	width=0.7\linewidth,
+\highLight{                                                 }	
+	colspec={ll|X|X|},
+}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+
+Similarly, too many blank lines in the body of the table might cause unexpected issues. In the example below, the code compiles, but the cell ``Table'' is not correctly aligned:
+
+\begin{Code}[show-output]
+\begin{tblr}{
+		width=0.7\linewidth,
+		colspec={llXX},
+}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	% Empty lines
+\highLight{                                                }
+\highLight{                                                }
+\highLight{                                                }
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+
+tabularray does not guarantee correct results if there are two or more consecutive blank lines. However, lines with only a comment do not count as blank lines.
+\end{errorbox}
+
+For a finer setting of the column size, it is possible to give an argument to the \snippet{X} column. This argument is a priority coefficient, for when there are several \snippet{X} columns in the table. Remember that, by default, the remaining space is distributed equally. Thanks to this coefficent, it is possible to adjust this distribution.
+
+For instance, \snippet{X[2]} is a column that has a coefficient of 2, \snippet{X[3]} has coefficient 3, and so on. By default, \snippet{X} is equivalent to \snippet{X[1]}.
+
+\begin{Code}[show-output]
+\begin{tblr}\highLight{{ll|X|X[2]|}}
+	Furniture & Price & Shop     & Comment \\ \hline
+	Bed       & 150   & MOBILI   & An entry-level, without mattress. \\
+	Table     & 800   & LUXTABLE & We'll be able to impress our guests \\
+	Desk      & 300   & LBC      & Essential for remote work \\
+\end{tblr}
+\end{Code}
+
+Finally, note that \snippet{X} can receive other options, such as horizontal alignment (\snippet{l}, \snippet{c}, \snippet{r}, \snippet{j}), or vertical alignment (\snippet{t}, \snippet{f}...): \snippet{X[3,m,j]} is a valid column.
+
+
+\section{Merged cells}
+Another highly appreciated functionality of tabularray if the ability to merge cells with ease. Let's look at the following table:
+
+\begin{Code}
+\begin{tblr}{l|l|l}
+		  & Monday     & Tuesday \\ \hline
+	8:00  & Literature & History \\ \hline
+	9:00  & Math       & PE \\ \hline
+	10:00 & Math       & Literature \\ \hline
+	11:00 & History    & Biology \\ \hline
+\end{tblr}
+\end{Code}
+
+It could be interesting to merge the Monday 9:00 and 10:00 cells, since it is the same class. 
+We can use the command \snippet{\textbackslash SetCell} to do so. Let's first show how to use it in our example:
+
+\begin{Code}[show-output]
+\begin{tblr}{l|l|l}
+		  & Monday     & Tuesday \\ \hline
+	8:00  & Literature & History \\ \hline
+	9:00  & \highLight{\SetCell[r=2]{l,m} Math      } & PE \\ \hline
+	10:00 & \highLight{      } & Literature \\ \hline
+	11:00 & History    & Biology \\ \hline
+\end{tblr}
+\end{Code}
+
+Note that the horizontal line automatically disappeared between the merged cells. Also note that the cell that is ``overwritten'' by the merged cell must still be indicated with a \snippet{\&}, even though it will not be displayed. Its content is irrelevant, as it will be overwritten by the contents of the cell containing the \snippet{\textbackslash SetCell}\footnote{This can lead to frustrating debugging sessions: the text you are writing is not appearing in the table, and you finally realize that you are writing text in a merged cell that is overwritten and therefore the text will never be displayed \emoji{poop}.}.
+
+Let us now explain the \snippet{\textbackslash SetCell} command. It takes an optional argument and a mandatory one:
+
+\begin{itemize}
+	\item \snippet{[r=2]} indicates that we will merge 2 \textbf{r}ows together, starting from the cell we are.
+	\item \snippet{\{l,m\}} indicates the horizontal and vertical alignment of the merged cell. Here, we used \snippet{l,m} so the cell will be left aligned, vertically centered. You had that right? If not, read the chapters on horizontal and vertical alignment again \emoji{slightly-smiling-face}. As a general rule, we can pass to the mandatory argument (in curly braces \snippet{\{\}}) of \snippet{\textbackslash SetCell} any option we could pass to a cell: width, alignment... We can also leave the curly braces empty if we don't want to specify anything.
+\end{itemize}
+
+We can also merge columns together, with the optional argument \snippet{[r=4]} (here, merging 4 columns). Finally, one can merge both rows and columns together:
+
+\begin{Code}[show-output]
+\begin{tblr}{|l|l|l|l|l|}
+	\hline
+	1 & 2                                & 3 & \highLight{\SetCell[c=2]{c}} 4,5 & not displayed!\\ \hline
+	1 & \highLight{\SetCell[r=2,c=3]{r,m,4cm}} 2,3,4 & 0 & 0                    & 5 \\ \hline
+	\highLight{\SetCell[r=2]{}} 1 &                  &   &                      & 5 \\ \hline
+	& 2                                  & 3 & 4                    & 5 \\ \hline
+\end{tblr}
+\end{Code}
+
+
+\begin{infobox}{TL;DR}
+	\begin{itemize}
+		\item Every column is actually a \snippet{Q} type column: \snippet{Q[l]}, \snippet{Q[c]}, \snippet{Q[r]} or \snippet{Q[j]}.
+		\item Columns can be given a width: \snippet{Q[l, 5cm]}. Cells can also be given a width: \snippet{\textbackslash SetCell\{5cm\}}.
+		\item Baseline alignment is done with the options \snippet{t}, \snippet{m}, \snippet{b} (for example, \snippet{Q[l,m,3cm]}). You can also use the options \snippet{h}, \snippet{f} to respectively position the text at the head (top) or the foot (bottom) of the cell.
+		\item Columns of type \snippet{X} fill all the available space. Their size can be adjusted as follows: \snippet{X[2]}. It can receive other arguments: \snippet{X[2,c,m]}.
+		\item Cells are merged with the example command \snippet{\textbackslash SetCell[r=2,c=3]\{l,m\}}, or similar. \snippet{r=} counts the number of merged \textbf{r}ows, \snippet{c=} counts the number of merged \textbf{c}olumns. Here, on top of that, \snippet{l,m} give the merged cell's alignment (left and vertically centered). We can leave the \snippet{\{\}} empty, or conversely write any styling instruction a cell can receive. The text from overwritten cells is not displayed (except the cell containing the \snippet{\textbackslash SetCell}).
+		\item \snippet{\{Multiline \textbackslash\textbackslash~ cell\}} is a multiline cell.
+	\end{itemize}
+
+\textbf{\underline{Exercise}}: recreate this table.
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{
+		colspec={Q[1.5cm]lXX[2,j]},
+		width=0.8\linewidth,
+	}
+	\SetCell[c=2]{c} Region &             & Celebrity                                        & Short bio \\ \hline
+	\SetCell[r=3]{m} Europe & Russia      & \SetCell[r=2]{} {Leonhard Euler \\(1707--1783) } & \SetCell[r=2]{}   One of the greatest mathematicians in history, he also made significant contributions to mechanics, fluid dynamics, optics and astronomy.\\  \hline
+	empty                   & Switzerland & empty                                            & not displayed either \\ \hline
+							& Greece  & {Socrates \\(-470 -- -399)}                          & One of the founders of philosophy. He left no written works; the only record of his thinking comes from his pupils Plato and Xenophon. \\ \hline
+	\SetCell[r=2]{} Asia    & Japan       & {Katsushika Hokusai \\(1760--1849)}              & A painter, draughtsman and printmaker, he is world-renowned for his woodblock print \textit{The Great Wave off Kanagawa}. He had a lasting influence not only on Japanese art, but also on European art (Van Gogh, Monet, Degas, etc.) \\ \hline
+							& India       & {Suśruta \\ (around -600)}                       & He wrote one of the seminal texts on Ayurvedic medicine and made major discoveries in the fields of cataract surgery and plastic surgery. He is regarded as the father of surgery. \\ \hline
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+The table must have a width of \snippet{0.8\textbackslash linewidth}, the first column must measure 1.5cm, and the last two columns must be \snippet{X} columns (note that they do not have the same width).
+
+The solution is available in \Cref{app:solution_control}.
+\end{infobox}
+
+\vfill 
+
+\begin{infobox}{End of the first part}
+	You now know enough about tabularray to create 99\% of the tables you will ever need to create. You can stop here for your first read-through. Experiment a bit, create your own tables, and when you will feel like it, come back and learn more with the next chapters!
+	\vspace{1em}
+	
+	By the way, if creating the tables by hand is too tedious, you can also use the website \url{https://www.latex-tables.com/}. You can generate tabularray tables by selecting ``tabularray'' in the ``Latex environment'' dropdown.
+\end{infobox}
+
+\vfill

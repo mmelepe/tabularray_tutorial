@@ -1,0 +1,182 @@
+\usepackage{emoji}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+\usepackage{soul}  % for the \hl command in snippets 
+\usepackage{graphicx}
+
+% table stuff
+\usepackage{piton}
+\usepackage{tabularray}
+\UseTblrLibrary{tikz,diagbox,functional}
+\usetikzlibrary{fadings}  % for the pqcrypto table
+\usepackage{xcolor,luacolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable,skins}
+\usepackage{lua-ul}
+\LuaULSetHighLightColor{yellow!40}
+
+\usepackage{adjustbox}  % for \adjustbox
+\usepackage{changepage}  % for \adjustwidth
+\usepackage{bbding}  % for \Checkmark and \XSolidBrush
+\newcommand{\yes}{\textcolor{green!70!black}{\Checkmark}}
+\newcommand{\no}{\textcolor{red!50}{\XSolidBrush}}
+
+\usepackage{paralist}  % compactitem
+
+\newtcolorbox{infobox}[1]{
+    breakable,
+    colback=green!15,
+    colframe=green!65!black,
+    fonttitle=\bfseries,
+    title={#1},
+    before skip balanced=\parskip,
+    after skip balanced=\parskip,
+    skin=enhanced,
+}
+
+\newtcolorbox{errorbox}[1]{
+    breakable,
+    colback=red!15,
+    colframe=red!65!black,
+    fonttitle=\bfseries,
+    title={#1},
+    before skip balanced=\parskip,
+    after skip balanced=\parskip,
+    skin=enhanced,
+}
+
+\newtcolorbox{questionbox}[1]{
+    breakable,
+    colback=violet!15,
+    colframe=violet!65!black,
+    fonttitle=\bfseries,
+    title={#1},
+    before skip balanced=\parskip,
+    after skip balanced=\parskip,
+    skin=enhanced,
+}
+
+\newtcolorbox{warningbox}[1]{
+    breakable,
+    colback=orange!15,
+    colframe=orange!65!black,
+    fonttitle=\bfseries,
+    title={#1},
+    before skip balanced=\parskip,
+    after skip balanced=\parskip,
+    skin=enhanced,
+}
+
+\newtcolorbox{standalonebox}{
+    colback=white,
+    hbox,
+    colframe=white,
+    left*=0mm,
+    right*=0mm,
+    bottom=0mm,
+    top=0mm,
+    boxsep=0mm,
+    sharp corners,
+    skin=enhanced,
+}
+
+% TODO find a way to avoid having to escape the special characters
+\newcommand{\snippet}[1]{{\sethlcolor{gray!30}\hl{\texttt{#1}}}}
+
+
+% Latex syntax highlighting with piton
+\NewPitonLanguage{LaTeX}{keywordsprefix = \ , alsoother = @_ , moredirectives={&}, morecomment = [l]\%}
+\PitonOptions{language = LaTeX, width=min, detected-commands = {highLight}, splittable=4}
+\SetPitonStyle[LaTeX]{ Number = , Directive= \color{red!50}}
+
+%%%%%%%%%%%
+% Display the code, render it, and create a copy-pastable annotation on the right side
+%%%%%%%%%%%
+
+% Almost copy-pasted from https://github.com/fpantigny/nicematrix/blob/master/nicematrix.tex#L79
+\ExplSyntaxOn
+\dim_new:N \l__pantigny_width_dim
+\bool_new:N \l__pantigny_show_output_bool
+\bool_new:N \l__pantigny_small_bool
+\bool_new:N \l__pantigny_execute_bool
+\bool_new:N \l__pantigny_footnotesize_bool 
+
+\keys_define:nn { pantigny }
+  {
+    width .dim_set:N = \l__pantigny_width_dim ,
+    annotation .code:n = \PitonOptions { annotation = #1 } ,
+    show-output .bool_set:N = \l__pantigny_show_output_bool ,
+    show-output .default:n = true,
+  }
+
+\NewPitonEnvironment { Code } { O { } }
+  {
+    \begin{tcolorbox}[colback=blue!3, boxrule=0pt]
+        \dim_zero:N \l__pantigny_width_dim
+        \PitonOptions { annotation, indent-broken-lines, continuation-symbol=\empty, end-of-broken-line=\empty, continuation-symbol-on-indentation=\empty }
+        \keys_set:nn { pantigny } { #1 }
+        \group_begin:
+        \char_set_catcode_other:N |
+        \color{gray}
+
+        \small
+        \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+          { 
+            \PitonOptions { width = \l__pantigny_width_dim  } 
+            \begin{minipage}[c]{\l__pantigny_width_dim} 
+          }
+    }
+    {
+        \dim_compare:nNnT \l__pantigny_width_dim > \c_zero_dim 
+          { \end{minipage} }
+        \group_end:
+        \bool_if:NTF \l__pantigny_show_output_bool
+          {
+                % \smallskip
+                \vspace{-0.5em}
+                \begin{center}\begin{standalonebox}
+                    \lua_now:n { tex.print(piton.get_last_code():explode(string.char(10)))}
+                \end{standalonebox}
+                \end{center}
+          }
+      	  {
+      	  	 \vspace{-0.2em}
+      	  }
+        \end{tcolorbox}
+    }
+\ExplSyntaxOff
+
+%%%%
+% for drawing the table in appendix
+%%%%
+
+% Inspired from https://tex.stackexchange.com/a/750321/430417
+\IgnoreSpacesOn
+
+\tlNew \gTikzPercentagePathsTl
+
+
+\prgNewFunction \colMaxValue {m} {  
+	\fpSet \lTmpaFp {\fpEval {\cellGetText{2}{#1}}}
+	\intStepOneInline {2} {\arabic{rowcount}} {
+		\fpSet \lTmpaFp {\fpMathMax{\lTmpaFp}{\fpEval {\cellGetText{##1}{#1}}}}
+	}
+	\prgReturn {\fpUse\lTmpaFp}
+}
+
+\prgNewFunction \barPlotPaths {m} {
+	\tlClear \gTikzPercentagePathsTl
+	\fpSet \lTmpaFp {\colMaxValue{#1}}
+	\intStepOneInline {2} {\arabic{rowcount}} {
+		\fpSet \lTmpbFp {\fpEval{\cellGetText{##1}{#1}}}  
+		\fpSet \lTmpcFp {\fpMathDiv {\lTmpbFp} {\lTmpaFp}}
+		\tlPutRight \gTikzPercentagePathsTl {
+			\evalWhole{
+				(##1-#1.south~west) rectangle
+				($(##1-#1.north~west)!{\fpUse \lTmpcFp}!(##1-#1.north~east)$)
+			}
+		}
+	}
+}
+\IgnoreSpacesOff

@@ -1,0 +1,121 @@
+\chapter{FAQ}\label{app:faq}
+
+\section{Why is my code slow to compile?}
+tabularray is not fast, around 10 times slower than native Latex tables, and even 30 times slower for \snippet{longtblr}! However, the latest versions have considerably increase tabularray performances.
+
+Make sure that your tabularray version is up to date (at least version 2025A for the performance boosts). You can refer to \Cref{app:version} to see how to check your version.
+
+\section{I cannot use Tikz in my tables, what is happening?}
+
+Tikz support in tabularray only comes from versions 2025A and more recent. If you are using TeXLive, this means that you must use a TexLive distribution at least as recent as 2025.
+
+Check that your tabularray version is up to date (at least version 2025A). You can refer to \Cref{app:version} to see how to check your version.
+
+\section{Why is the styling for my row/cell/column not correctly displayed?}
+
+Remember that for tabularray, style priority is given to the last instruction on a specific property. Hence, the next two tables have different render:
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={ccc},
+	cell{1}{1} = {white},
+	row{1} = {red9},
+	column{1} = {blue9},
+}
+	1 & 2 & 3 \\
+	4 & 5 & 6 \\ 
+	7 & 8 & 9
+\end{tblr}
+\end{Code}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={ccc},
+	row{1} = {red9},
+	column{1} = {blue9},
+	cell{1}{1} = {white},
+}
+	1 & 2 & 3 \\
+	4 & 5 & 6 \\ 
+	7 & 8 & 9
+\end{tblr}
+\end{Code}
+
+\section{I got the error message \texttt{Erreur: Not allowed in LR mode}, what is that?}}
+
+This error happens sometimes, when you have line breaks in a cell that tabularray has trouble taking into account. Notably, this error pops up when you want to add a list in a cell. For instance, the following code will generate an error:
+
+\begin{Code}
+\documentclass{article}
+\usepackage{tabularray}
+
+\begin{document}
+\begin{tblr}{hlines, colspec={ll}}
+	Text text text text text & 
+	% itemize has a default vertical spacing before the list
+	% which might cause alignment issues, cf. https://stackoverflow.com/q/1061112
+	\begin{itemize} 
+		\item List List List List List List
+		\item List List List List List List List
+	\end{itemize} \\
+\end{tblr}
+\end{document}
+\end{Code}
+
+In order to fix the bug, you will have to add the \snippet{varwidth} tabularray library in your preamble. This will allow tabularray to correctly compute each cell's width:
+
+\begin{Code}
+\documentclass{article}
+\usepackage{tabularray}
+\highLight{\UseTblrLibrary{varwidth}}
+
+\begin{document}
+\begin{tblr}{hlines, colspec={ll}}
+	Text text text text text & 
+	% itemize has a default vertical spacing before the list
+	% which might cause alignment issues, cf. https://stackoverflow.com/q/1061112
+	\begin{itemize} 
+		\item List List List List List List
+		\item List List List List List List List
+	\end{itemize} \\
+\end{tblr}
+\end{document}
+\end{Code}
+
+\section{I got the error message \texttt{Erreur: runaway argument? } on an empty line, what does that mean?}
+
+tabullarray does not support empty lines in its header. If you want to visually separate some options, you need to add a comment \snippet{\%} at the beginning of the empty line. 
+
+The following example will not compile: 
+
+\begin{Code}
+\begin{tblr}{
+	colspec={llllll},
+	\highLight{									}
+	cell{2-4}{1} = {font={\ttfamily\small},fg=gray},
+	cell{2,4}{6} = {green7},
+	cell{3}{6} = {red6},
+}
+	Company & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO   & +150k & -300k & +210k & +150k & +210k \\
+	McDalle & -120k & -200k & -200k & +250k & -270k \\
+	EauCar  & +150k & +300k & +450k & +150k & +1050k \\
+\end{tblr}
+\end{Code} 
+
+But this one will:
+
+\begin{Code}
+\begin{tblr}{
+	colspec={llllll},
+	%
+	cell{2-4}{1} = {font={\ttfamily\small},fg=gray},
+	cell{2,4}{6} = {green7},
+	cell{3}{6} = {red6},
+}
+	Company & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO   & +150k & -300k & +210k & +150k & +210k \\
+	McDalle & -120k & -200k & -200k & +250k & -270k \\
+	EauCar  & +150k & +300k & +450k & +150k & +1050k \\
+\end{tblr}
+\end{Code}

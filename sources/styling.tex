@@ -1,0 +1,418 @@
+\chapter{Let's add some styling}\label{sec:styling}
+
+We now arrive to a big chunk of this tutorial: styling tables. tabularray has a very powerful styling mechanism, that allows to easily create complex designs.
+
+\section{A bit of colour and formatting!}
+Colours in a table can be visually very efficient for carrying information, provided they are used sparingly. In any case, they are very to integrate within tabularray. 
+Before anything, it is necessary to load the package \snippet{xcolor} in the preamble (this won't be useful anymore with the version 2026A)\footnote{xcolors' default colors are very saturated: this is {\sethlcolor{red}\hl{red}}, this is {\sethlcolor{green}\hl{green}}. However, colors can be mixed together: \snippet{red!60} is 60\% red and 40\% white (the default mixing color), and {\sethlcolor{red!60}\hl{gives this color}}. Similarly, \snippet{green!70!black} will be 70\% green, 20\% black and {\sethlcolor{green!70!black}\hl{give this.}}}. %Personally, I also like to load the package \snippet{ninecolors}\footnote{\url{https://mirrors.ctan.org/macros/latex/contrib/ninecolors/ninecolors.pdf}}, which offers pretty colours.
+
+\begin{Code}
+\documentclass{article}
+\usepackage{tabularray}
+\usepackage{xcolor}
+
+\begin{document}
+	% our tables here
+\end{document}
+\end{Code}
+
+We can now give cells a background color with our friend the command \snippet{\textbackslash SetCell}:
+
+\begin{Code}[show-output]
+\begin{tblr}{llllll}
+	Company  & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO    & +150k & -300k & +210k & +150k & \SetCell{green!80!black} +210k \\
+	McDalle  & -120k & -200k & -200k & +250k & \SetCell{red!60} -270k \\
+	FireCar  & +150k & +300k & +450k & +150k & \SetCell{green!80!black} +1050k \\
+\end{tblr}
+\end{Code}
+
+Note that since we are not merging cells, we do not need the optional argument of \snippet{\textbackslash SetCell} (the one between square brackets \snippet{[]}).
+
+You can also manage text color with the argument \snippet{fg}, or text size, its font family (\snippet{\textbackslash sffamily}, \snippet{\textbackslash ttfamily}, \snippet{\textbackslash bfseries}, \snippet{\textbackslash itshape}, \snippet{\textbackslash large}, \snippet{\textbackslash small}...), both with the argument \snippet{font}.
+
+\begin{Code}
+\begin{tblr}{llllll}  % Either with \SetCell...
+	Company & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	\highLight{\SetCell{font={\small\ttfamily},fg=gray}}COSTO   & +150k & -300k & +210k & +150k & \highLight{\SetCell{green!80!black}} +210k \\
+	\highLight{\SetCell{font={\small\ttfamily},fg=gray}}McDalle & -120k & -200k & -200k & +250k & \highLight{\SetCell{red!60}} -270k \\
+	\highLight{\SetCell{font={\small\ttfamily},fg=gray}}EauCar  & +150k & +300k & +450k & +150k & \highLight{\SetCell{green!80!black}} +1050k \\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}{llllll}  % Or native Latex when possible (not for everything)
+	Company & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	\highLight{\small\color{gray}\texttt{COSTO}}    & +150k & -300k & +210k & +150k & \SetCell{green!80!black} +210k \\
+	\highLight{\small\color{gray}\texttt{McDalle}}  & -120k & -200k & -200k & +250k & \SetCell{red!60} -270k \\
+	\highLight{\small\color{gray}\texttt{FireCar}}  & +150k & +300k & +450k & +150k & \SetCell{green!80!black} +1050k \\
+\end{tblr}
+\end{Code}
+
+\section{Style in the header, style in the body}
+
+\subsection{Two possible methods}
+Until now, we saw that some options were to be defined in the table header (for instance, \snippet{hlines}), whereas some others had to be defined in the table body (for instance, \snippet{\textbackslash SetCell}). In reality, all the table properties can be defined both in the header and the body.
+
+\subsection{Cell style in the header}
+
+We can also use header styling rather than scatter it in the table body. The result is exactly the same.
+
+% TODO for some reason the fg is not applied in this snippet???? Note sure if this is a piton bug or what.
+\begin{Code}
+\begin{tblr}{
+	colspec={llllll},
+	\highLight{cell{2,4}{6} = {green!80!black},}
+	\highLight{cell{3}{6} = {red!60},}
+	\highLight{cell{2-4}{1} = {fg=gray, font={\ttfamily\small}},}
+}
+	Company  & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO    & +150k & -300k & +210k & +150k & +210k \\
+	McDalle  & -120k & -200k & -200k & +250k & -270k \\
+	FireCar  & +150k & +300k & +450k & +150k & +1050k \\
+\end{tblr}\end{Code}
+
+Applying a style to \snippet{cell\{i\}\{j\}} is equivalent to applying the same style to the cell in the i-th row and the j-th column with \snippet{\textbackslash SetCell}. 
+
+Furthermore, if you want to give the same style to different cells, you can use the comma separator \snippet{,}: in the example above, \snippet{cell\{2,4\}\{6\}} applies both to \snippet{cell\{2\}\{6\}} and \snippet{cell\{4\}\{6\}}. For a range of cells, you can use the dash joiner \snippet{-}: \snippet{cell\{2-4\}\{1\}} applies to \snippet{cell\{2\}\{1\}}, \snippet{cell\{3\}\{1\}} and \snippet{cell\{4\}\{1\}}. Useful!
+
+Still further, you can select several distinct cells with the syntax \snippet{cell\{1\}\{2\}, \{3\}\{5\}} that will select both \snippet{cell\{1\}\{2\}} and \snippet{cell\{3\}\{5\}}.
+
+\subsection{What's the difference?}
+\begin{questionbox}{}
+Why do we need two different ways to define styling in our table if they are equivalent?
+\end{questionbox}
+
+Defining the style in the header allows for a clear seperation of styling and data, but every time we insert or delete a row, you need to update the coordinates of your cells in the header. Which migh cause issues when you are regularly updating your table, or when you are working with people not used to tabularray\footnote{If you already worked collaboratively on a Latex project, you know there is nothing more frustrating than having to fix your table every time your colleague tries to change something, then sends you a message ``the table is broken it's not compiling well anymore''.}.
+
+Personally, I recommend to use the styling in the header as much as possible, which is when the data are more or less finalized, and when the other users of your document know how to use styling in the header (or won't touch it).
+
+Let's finish this section with a few precisions.
+
+\begin{itemize}
+	\item In a cell styling (either in the body with \snippet{\textbackslash SetCell} or in the header with \snippet{cell\{i\}\{j\}}), you can give \emph{any} styling instruction, including horizontal and vertical alignment, or cell width or height (with the argument \snippet{ht}): \snippet{\textbackslash SetCell\{3cm,red!20,l,m,ht=2cm\}}.
+	\item You can also merge cells from the header. When you used to write \snippet{\textbackslash SetCell[r=2,c=3]\{m,red\}} for the cell \snippet{(i,j)}, you can also write \snippet{cell\{i\}\{j\} = \{r=2,c=3\}\{m, red\}} in the header. Note that \snippet{\textbackslash SetCell} requires an optional argument \snippet{[]} followed by a mandatory one \snippet{\{\}}, whereas the header mode requires two mandatory arguments for defining merged cells: \snippet{\{\}\{\}}. If you only want to define some styling without merging cells, you can omit the first pair of curly braces.
+\end{itemize}
+
+To illustrate, the following two tables have the same result:
+
+\begin{Code}
+%  in-body styling
+\begin{tblr}{
+	colspec = {l|llllc},
+}
+	\highLight{\SetCell[c=5]{c}} Group A & & & & & \highLight{\SetCell[r=2]{m,c}} \textbf{Total}\\
+	& Netherlands & Senegal & Ecuador & Qatar & \\ \hline
+	Netherlands & \highLight{\SetCell{gray}} & 2-0 & 1-1 & 2-0 & \textbf{7} \\
+	Senegal     & 0-2 & \highLight{\SetCell{gray}} & 2-1 & 3-1 & \textbf{6} \\
+	Ecuador     & 1-1 & 1-2 & \highLight{\SetCell{gray}} & 2-0 & \textbf{4} \\
+	Qatar       & 0-2 & 1-3 & 0-2 & \highLight{\SetCell{gray}} & \textbf{0} \\
+\end{tblr}
+\end{Code}
+
+\begin{Code}[show-output]
+% header styling
+\begin{tblr}{
+	colspec = {l|llllc},
+	\highLight{cell{1}{1} = {c=5}{c},}  % two {} pairs because we are merging cells
+	\highLight{cell{1}{6} = {r=2}{m,c},}
+	\highLight{cell{{3}{2}, {4}{3}, {5}{4}, {6}{5}} = {gray},}
+	\highLight{cell{1-6}{6} = {font=\bfseries},} % one {} pair
+}
+	Group A     &          &         &          &       & Total \\
+	& Netherlands & Senegal & Ecuador & Qatar &   \\ \hline
+	Netherlands &          & 2-0     & 1-1      & 2-0   & 7 \\
+	Senegal     & 0-2      &         & 2-1      & 3-1   & 6 \\
+	Ecuador     & 1-1      & 1-2     &          & 2-0   & 4 \\
+	Qatar       & 0-2      & 1-3     & 0-2      &       & 0 \\
+\end{tblr}
+\end{Code}
+
+\section{Style of a row, style of a column}
+
+Until now, we were defining some properties of columns in the \snippet{colspec} argument (e.g. \snippet{Q[3cm, m, l]}). But we can also use the arguments \snippet{columns}, \snippet{column} to avoid overloading the colspec. \snippet{columns} applies to all columns, whereas \snippet{column\{i\}} only applies to the i-th column.
+
+Similarly, the same exists for the rows, with \snippet{rows} and \snippet{row}. The in-body variant is \snippet{\textbackslash SetRow\{\}} at the beginning of a row.
+
+And what if we want to apply a style to the whole table? We can use the argument \snippet{cells} (or the command \snippet{\textbackslash SetCells}).
+
+
+\begin{Code}[show-output]
+% Add \usepackage{xcolor,ninecolors} in the preamble
+
+\begin{tblr}{
+	colspec = {rllllll},
+	\highLight{cells = {font=\itshape},}
+	\highLight{columns = {2cm, m},}
+	\highLight{column{1} = {1cm},}  % First column will be 1cm wide 
+	% The four lines above are equivalent to colspec={Q[font=\itshape,r,1cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m] Q[font=\itshape,l,2cm,m]}. See why only using colspec is not always the best. :D
+	\highLight{row{1} = {ht=1cm,blue!50},}  % First row will be at least 1cm high
+	colsep=4pt,
+	rowsep=1pt,
+	cell{1}{2} = {c=6}{c},
+	cell{2}{1} = {r=4}{m,blue!70},
+}
+	& Alphabets & & & & & \\ \hline
+	Greek & {Alpha \\ $\alpha$} & {Beta \\ $\beta$} & {Gamma \\ $\gamma$} & {Delta \\ $\delta$} & {Epsilon \\ $\varepsilon$} & {Zeta \\ $\zeta$} \\
+	& {Eta \\ $\eta$} & {Theta \\ $\theta$} & {Iota \\ $\iota$} & {Kappa \\ $\kappa$} & {Lambda \\ $\lambda$} & {Mu \\ $\mu$} \\
+	& {Nu \\ $\nu$} & {Xi \\ $\xi$} & {Omikron \\ o} & {Pi \\ $\pi$} & {Rho \\ $\rho$} & {Sigma \\ $\sigma$, $\varsigma$} \\
+	& {Tau \\ $\tau$} & {Upsilon \\ $\upsilon$} & {Phi \\ $\varphi$} & {Chi \\ $\chi$} & {Psi \\ $\psi$} & {Omega \\ $\omega$}\\
+\end{tblr}
+\end{Code}
+
+\section{Priority rules}
+
+Quick question for you: what happens if you write conflicting styling instructions to a single cell? For instance, what will be the colour and alignment of the first cell of this table?
+
+\begin{Code}
+\begin{tblr}{
+	colspec = {lll},
+	row{1} = {blue!70, r},
+	cell{1}{1} = {red!50},
+	column{1} = {green!70},
+}
+	\SetCell{magenta!60} 1 & 2 & 3 \\
+	444 & 5 & 6 \\
+\end{tblr}
+\end{Code}
+
+
+
+We have 5 different styling instructions for the topleft cell:
+
+% Todo not great to have compactitem but gives a nicer page display
+\begin{compactitem}
+	\item left aligned text (inherited from \snippet{colspec})
+	\item blue background and right aligned text (inherited from \snippet{row\{1\}})
+	\item red background (inherited from \snippet{cell\{1\}\{1\}})
+	\item green background (inherited from \snippet{column\{1\}})
+	\item magenta background (inherited from \snippet{\textbackslash SetCell})
+\end{compactitem}
+
+Let's have a look at the compiled result:
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{
+	colspec = {lll},
+	row{1} = {blue!70, r},
+	cell{1}{1} = {red!50},
+	column{1} = {green!70},
+}
+	\SetCell{magenta!60} 1 & 2 & 3 \\
+	444 & 5 & 6 \\
+\end{tblr}
+\end{standalonebox}
+\end{center}
+Priority rules are actually very simple: for a given property (color, alignment...) the last written specification is the one that will be applied. In our case, the last alignment is \snippet{r}, thus the text will be right aligned. Similarly, the last background color is the one set by \snippet{\textbackslash SetCell}, thus magenta wins.
+
+So, do not forget to arrange your style elements in the order that suits you best \emoji{wink}.
+
+\section{Border style}
+
+\subsection{Border type and colour}
+There are three different borders: \snippet{solid}, \snippet{dotted}, \snippet{dashed}.
+Similarly, the border width and color can be personalized, either in directly in the table (as an optional argument to the vertical border \snippet{|} or horizontal border \snippet{\textbackslash hline}), or in the table headers with the arguments \snippet{hline} and \snippet{vline}:
+
+\begin{Code}
+\begin{tblr}\highLight{{l|[dotted,green]ll}}  % styling in the body
+	Candidate & Duration & Score \\ \highLight{\hline[2pt]}
+	John      & 1:03     & 25 \\ \highLight{\hline[dashed,red]}
+	Justine   & 1:08     & 32 \\ \highLight{\hline[dashed,red]}
+	Petr      & 0:58     & 30 \\
+\end{tblr}
+\end{Code}
+\begin{Code}[show-output]
+\begin{tblr}{  % styling in the header
+	\highLight{hline{1},}  % hline or vline without = means default values (i.e. 1pt solid black)
+	\highLight{hline{2,5} = {2pt},}
+	\highLight{hline{3-4} = {dashed,red},}
+	\highLight{vline{2} = {dotted,green},}
+	colspec={lll},
+}
+	Candidate & Duration & Score \\  % No more hline since we defined them in the header
+	John 	  & 1:03     & 25 \\
+	Justine   & 1:08     & 32 \\
+	Petr      & 0:58     & 30 \\
+\end{tblr}
+\end{Code}
+
+As you can see, it is not because you can add style to the borders that you should \emoji{grinning}.
+
+Note that the vertical border of index 1 is the one situated at the far left of the table, before the first column. Vertical border 2 is situated between column 1 and 2, and so on. The same applies for horizontal borders.
+
+\subsection{Partial border}
+Borders do not have to go from one end of the table to the other end.
+
+Instead of defining the style as, say, \snippet{hline\{3\} = \{2pt, dotted\}}, you would write \snippet{hline\{3\} = \{2-7\}\{2pt, dotted\}}, so that the \snippet{hline} of index 3 will start at the 2nd column until the 7th column. The in-body variant (that I do not recommend) is \snippet{\textbackslash SetHline\{2-7\}\{2pt, dotted\}}. For example:
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	hline{1} = {2-8}{},  % {} gives default style values, i.e. 1pt solid black on columns 2 to 8
+	hline{2-4} = {1-8}{},
+	vline{1} = {2-3}{red},  % Same for vertical border
+	vline{2-9} = {1-3}{red},
+	colspec = {cccccccc},
+}
+	& Monday   & Tuesday  & Wednesday & Thursaday & Friday   & Saturday & Sunday \\
+	Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
+	Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers \\
+\end{tblr}
+\end{Code}
+
+\section{Advanced selectors}
+
+You can apply the same style to every odd column/row with the selector \snippet{odd}, and even with \snippet{even}.
+
+If you want the selector to start only at row (or column) \snippet{i} until the end of the table, you can write \snippet{even[j]}.
+
+You can select the last row (or column) with the selector \snippet{Z}.
+With tabularray version 2025A and later, the row or column before last can be selected with \snippet{Z[2]}, etc.
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec = {lll},
+	\highLight{hline{1,Z[2]} = {2-Z}{2pt, red},}
+	\highLight{row{odd[3]} = {gray!20},}
+	\highLight{row{Z} = {font=\bfseries},}
+}
+	Subject & {Reaction time (s)} & {Pain (EVA scale)} \\ \hline
+	Subjet 1 & 0:03 & 3 \\
+	Subjet 2 & 0:08 & 7 \\
+	Subjet 3 & 0:01 & 4 \\
+	AVERAGE  & 0:04 & 4.67
+\end{tblr}
+\end{Code}
+
+\section{Smart selections with class and id}
+
+\begin{warningbox}{Minimal tabularray version}
+	class and id are only available if your tabularray version is 2025A or above. If the code samples in this section do not compile for you, check that your version is up to date (there is a guide in \Cref{app:version}).
+\end{warningbox}
+
+Sometimes, the cells we want to select are not neatly aligned to be easily selected with our available selectors. Or we simply don't want to lose time counting and updating the column and row number of a \snippet{cell\{i\}\{j\}} argument every time we add a row to the table, and keep our style easy to read.
+
+Luckily, since version 2025A tabularray offers a class and id mechanism, very similar to how class and id work in HTML: you can give the same class to many cells, but an id only applies to a single cell (if you define the same id several times, only the last definition will be kept in memory).
+
+A class or id name must be lowercase alphabetic, except the first letter of an id that \emph{must} be uppercase. For instance, \snippet{positive} is a valid class name and \snippet{Champion} is a valid id name. \snippet{PRIVATE} or \snippet{top3} are neither valid class or id names.
+
+Each cell can be given a class or id with the command \snippet{\textbackslash SetChild} (and not \snippet{\textbackslash SetCell}!)\footnote{One limitation: \snippet{\textbackslash SetChild} \emph{must} be the first element in a cell, even before \snippet{\textbackslash hline} (writing \snippet{\textbackslash hline} after  \snippet{\textbackslash SetChild} will give the expected result). It also conflicts with slightly complex newline commands  \snippet{\textbackslash\textbackslash[1em]} (or similar), and \snippet{\textbackslash\textbackslash*} if they are written just before (these commands respectively create a newline of size \snippet{1em}, and prevent a page break at this line). Instead, replace these occurrences by \snippet{\textbackslash\textbackslash \, \textbackslash SetRow\{belowsep+=1em\}} and 
+\snippet{\textbackslash\textbackslash \, \textbackslash nopagebreak}. For \snippet{\textbackslash hline}, you can either place it in the header styling, or write it after the \snippet{\textbackslash SetChild} (it will have the desired output). Then, you can give the desired style to your cells in the header.
+}. For instance, you can set a class with \snippet{\textbackslash SetChild\{class=myclass\}}, an id with \snippet{\textbackslash SetChild\{id=Myid\}}. 
+	
+A cell can get both a class and an id: \snippet{\textbackslash SetChild\{class=myclass,id=Myid\}}. Similarly, a cell can be attributed more than one class: \snippet{\textbackslash SetChild\{class=first,class=second\}}. This is useful for instance when the table is created programmatically.
+
+
+\begin{Code}[show-output]
+% Add \usepackage{xcolor,ninecolors} in the preamble
+\begin{tblr}{
+	colspec = {lllllll},
+	row{1} = {c, font=\bfseries\large},
+	\highLight{cell{personalbest} = {font=\bfseries},}
+	\highLight{cell{Gold} = {yellow!90!black},}
+	\highLight{cell{Silver} = {gray!80},}
+	\highLight{cell{Bronze} = {brown},}
+}
+	Athlete & \#1 & \#2 & \#3 & \#4 & \#5 & \#6 \\ \hline
+	Chase Jackson    & 19.55 & x & 19.43 & 19.67 & x & \highLight{\SetChild{class=personalbest,id=Silver}} 20.21 \\
+	Fanny Roos       & 19.33 & 19.07 & 18.99 & 18.91 & 18.83 & \highLight{\SetChild{class=personalbest}} 19.54 \\
+	Jessica Schilder & 18.23 & 18.68 & 19.24 & 19.51 & 18.76 & \highLight{\SetChild{class=personalbest,id=Gold}} 20.29 \\
+	Maddi Wesche     & \highLight{\SetChild{class=personalbest,id=Bronze}} 20.06 & x & 19.90 & x & 18.87 & x \\
+	Sarah Mitton     & 19.76 & 19.18 & \highLight{\SetChild{class=personalbest}} 19.81 & 19.75 & 19.80 & 19.62 \\
+	Yemisi Ogunleye  & \highLight{\SetChild{class=personalbest}} 19.33 & x & x & 18.62 & 18.73 & 18.89 \\
+\end{tblr}
+\end{Code}
+
+\begin{errorbox}{Non-existing class and id}
+Until tabularray version 2025C, if you try to apply a style to a class or id that has not been defined in the table, compilation will fail! 
+
+For instance, the following incomplete table will generate an error, since there is no cell with class \texttt{personalbest}, or id \texttt{Gold}, \texttt{Silver} or \texttt{Bronze}:
+
+\begin{Code}
+\begin{tblr}{
+	colspec = {lllllll},
+	row{1} = {c, font=\bfseries\large},
+	cell{personalbest} = {font=\bfseries},
+	cell{Gold} = {yellow!90!black},
+	cell{Silver} = {gray!80},
+	cell{Bronze} = {brown},
+}
+	Attempt & \#1 & \#2 & \#3 & \#4 & \#5 & \#6 \\ \hline
+	% TODO ask the intern to fill the table
+\end{tblr}	
+\end{Code}
+
+With the upcoming tabularray 2026A, this code will only generate a warning.
+\end{errorbox}
+
+Uffff. I think we can stop here, you've learnt enough about styling already \emoji{slightly-smiling-face}.
+
+\begin{infobox}{TL;DR}
+\begin{itemize}
+	\item Cells can have background or foreground colour: \snippet{\textbackslash SetCell\{grey, fg=red\}}
+	\item In-body styling with \snippet{\textbackslash SetCell}, \snippet{\textbackslash SetRow}, etc., and header styling with \snippet{cell}, \snippet{row}, \snippet{column}, \snippet{hline}, \snippet{cells}, etc. You can select the cell (or row, column, border) with its coordinates: \snippet{row\{3\} = \{m,2cm,red\}}. You can select ranges: \snippet{cell\{1-4\}\{5,8\} = \{font=\textbackslash bfseries\}}
+	\item Merged cells can be declared in the header: \snippet{cell\{1\}\{5\} = \{r=2\}\{fg=yellow\}}
+	\item You can select odd indexes with \snippet{odd}, even with \snippet{even}: \snippet{cell\{odd\} = {green}}. The last index can be selected with \snippet{Z}, the one before last with \snippet{Z[1]}, etc.: \snippet{hline\{Z\} = \{2pt\}}
+	\item If there are conflicting styling instructions on the same property for the same item, the last specification that is written is the one that will be applied.
+	\item You can give a class or id to a cell with \snippet{\textbackslash SetChild}. The class name is lowercase alphabetic, the id name starts with an uppercase and the rest is lowercase alphabetic: \snippet{\textbackslash SetChild\{id=Unique\}}. You can then apply a style to the class or the id: \snippet{cell\{Unique\} = \{r=2\}{m}}
+\end{itemize}
+
+\textbf{\underline{Exercise:}} recreate the table below.
+
+\begin{center}
+\begin{standalonebox}
+\begin{tblr}{
+	colspec = {rcccccc},
+	%
+	% rows
+	row{even[4]} = {gray!20},
+	row{Z[2],Z} = {white}, % overload to avoid gray in the last 2 rows
+	% We could have used row{every[2]{4}{-2}} = {gray!20},
+	% (but we did not see this selector in the tutorial)
+	row{Z} = {font=\bfseries},
+	%
+	% cells 
+	% merging cells
+	cell{1}{even} = {c=2}{c},
+	cell{Z}{even} = {c=2}{c},
+	% we could have used cell{1,Z}{even}
+	% Background colours
+	cell{2,Z[2]}{even} = {green!30},
+	cell{2,Z[2]}{odd[3]} = {red!20},
+	% styling for qualified/disqualified
+	cell{qualified} = {green!60!black, fg=white},
+	cell{disqualified} = {red!80!black, fg=white},
+	%
+	% borders
+	hline{2} = {2-Z}{dashed},
+	hline{3} = {},  % empty style means default style
+	hline{Z[3]} = {2pt},
+	vline{4,6} = {2-Z}{},
+}
+	& Mini &&  Juniors && Seniors &\\
+	& Won & Lost & Won & Lost & Won & Lost \\
+	Day 1 & 2 & 3 & 5 & 1 & 3 & 4 \\
+	Day 2 & 4 & 1 & 2 & 4 & 7 & 0 \\
+	Day 3 & 0 & 5 & 3 & 3 & 3 & 4 \\
+	Day 4 & 2 & 3 & 1 & 5 & 4 & 3 \\
+	Day 5 & 3 & 2 & 5 & 1 & 6 & 1 \\
+	Day 6 & 4 & 1 & 3 & 3 & 2 & 5 \\
+	Total & 15 & 15 & 19 & 17 & 25 & 17 \\
+	Qualified? & \SetChild{class=disqualified}No && \SetChild{class=qualified}Yes && \SetChild{class=qualified}Yes\\
+\end{tblr}
+\end{standalonebox}
+\end{center}
+
+The last border is \snippet{2pt}, colours used are \snippet{gray!20}, \snippet{green!30}, \snippet{red!20}, \snippet{green!60!black}, \snippet{red!80!black}. Last row is in bold. The first border is dashed, and observe where each border starts and stops.
+
+Try to make it so your style is only in the table headers, and that the body of your table only contains your data and the possible \snippet{\textbackslash SetChild}. Also try to make it so that your styling keeps working if, in the body of your table, you add a column ``Veteran'', or a day 7.
+
+The solution is in \Cref{app:styling_solution}. 
+\end{infobox}
+
+This chapter was quite dense, I give that to you. But it is essential! Styling is important, because an ugly table will be less read or even less understood. Take your time to read this chapter again and to remember it.
+
+\vfill 
+\begin{infobox}{}
+We have already seen most of tabularray functionalities. After this, we will discover more advanced usages, but you can also stop the tutorial here!
+\end{infobox}
+
+\vfill

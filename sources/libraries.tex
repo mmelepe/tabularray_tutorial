@@ -1,0 +1,249 @@
+\chapter{Some tabularray libraries}\label{sec:libraries}
+
+We will now explore some very useful functionalities of tabularray, that are relegated to libraries: the ability to draw on your table using tikz, and the ability to have diagonal separations in a cell.
+
+\section{Drawing in your table with Tikz}
+\begin{warningbox}{Minimal tabularray version}
+The tikz library is only available from tabularray version 2025A or more recent. If the examples in this chapter do not compile for you, check that your version is up to date (there is a guide in \Cref{app:version}).
+\end{warningbox}
+
+In order to use tikz\footnote{tikz is a very powerful drawing package for Latex. This document is not a Tikz tutorial, you can some some tutorials at \url{https://tikz.dev/} or \url{https://www.overleaf.com/learn/latex/LaTeX_Graphics_using_TikZ\%3A_A_Tutorial_for_Beginners_(Part_1)\%E2\%80\%94Basic_Drawing}.} in our tables, we will add \snippet{\textbackslash UseTblrLibrary\{tikz\}} in our preamble:
+
+\begin{Code}
+\documentclass{article}
+\usepackage{tabularray}
+\UseTblrLibrary{tikz}  % \Use with uppercase U!
+
+\begin{document}
+% Our tables here
+\end{document}
+\end{Code}
+
+We now can add drawings, either above our table, or below our table:
+
+\begin{Code}
+\begin{tblrtikzbelow}
+	% Drawings here will be drawn below the table 
+\end{tblrtikzbelow}
+
+\begin{tblrtikzabove}
+	% Drawings here will be drawn above the table
+\end{tblrtikzabove}
+
+\begin{tblr}{}
+\end{tblr}
+\end{Code}
+
+Note that the environments \snippet{tblrtikzbelow} and \snippet{tblrtikzabove} must be declared before the table where you want to draw.
+
+Moreover, each table cell has coordinates that can be used within tikz drawings. For instance, the cell at the 1st row and 5th coordinate is matched by a tikz node named \snippet{(1-5)}. In general, a node of name \snippet{(i-j)} is matching the cell of coordinates \snippet{(i,j)}. There is also the tikz node \snippet{table}, that encompasses the whole table.
+
+You are now free to use any tikz command and make your table prettier. This tutorial is not a tikz tutorial, so I will simply give a few examples of what can be done. 
+
+The first example is a slight modification of an example from the official tabularray documentation. See how the red lines are drawn above the text, while blue background is drawn below.
+
+\begin{Code}[show-output]
+% \usepackage{ninecolors} and \UseTblrLibrary{tikz} in the preamble
+\begin{tblrtikzbelow}
+	\path[fill=blue!15,draw=blue!80, ultra thick, rounded corners]
+	  (table.north west) rectangle (table.south east);
+\end{tblrtikzbelow}
+
+\begin{tblrtikzabove}
+	\draw[red!70, thick]
+	  (2-2.north west) -- (2-3.south east)  % Line from 2-2 top left to 2-3 bottom right
+	  (2-2.south west) -- (2-3.north east);  % From 2-2 bottom left to 2-3 top right
+\end{tblrtikzabove}
+
+\begin{tblr}{c|c|c|c}
+	1-1 & 1-2       & 1-3        & 1-4 \\ \hline
+	2-1 & some text & other text & 2-4 \\ \hline
+	3-1 & 3-2       & 3-3        & 3-4
+\end{tblr}
+\end{Code}
+
+Similarly, each intersection \snippet{i,j} (i-th horizontal line and j-th vertical line) has its own name, labelled \snippet{(hi-|vj)}. It can be used as illustrated by the example from the official documentation below:
+
+\begin{Code}[show-output]
+\begin{tblrtikzabove}
+	\draw[color=green,thick]
+	  (h1-|v1) -- (h1-|v2) -- (h2-|v2) -- (h2-|v3) -- (h3-|v3) -- (h3-|v4)
+	  -- (h4-|v4) -- (h4-|v5) -- (h2-|v5) -- (h2-|v6) -- (h1-|v6);
+\end{tblrtikzabove}
+
+\begin{tblr}{colspec={ccccc},hlines={4pt},vlines={3pt}}
+	1-1 & 1-2 & 1-3 & 1-4 & 1-5 \\
+	2-1 & 2-2 & 2-3 & 2-4 & 2-5 \\
+	3-1 & 3-2 & 3-3 & 3-4 & 3-5
+\end{tblr}	
+\end{Code}
+
+Incorporating tikz in your tables in quite niche. But when you do need it, it is oh so useful! 
+Here is a concrete example, albeit a little bit complicate if you are not familiar with tikz:
+
+% cheating a bit  
+\begin{adjustwidth}{-1cm}{-1cm}
+\begin{Code}[show-output]
+% \usepackage{xcolor}  % in the preamble
+% \UseTblrLibrary{tikz}  % in the preamble
+
+\begin{tblrtikzbelow}
+	% We draw a rectangle in each cell, between the south west (bottom left);
+	% and a mix between north west (top left) and north east (top right), weigthed by
+	%  a/b with "a" the value in the cell and "b" the maximum value 9692642
+	\draw [white,line width=0.5pt,fill=cyan!20] 
+		(2-5.south west) rectangle ($(2-5.north west)!\fpeval{9692642 / 9692642}!(2-5.north east)$)
+		(3-5.south west) rectangle ($(3-5.north west)!\fpeval{7809608 / 9692642}!(3-5.north east)$)
+		(4-5.south west) rectangle ($(4-5.north west)!\fpeval{7266118 / 9692642}!(4-5.north east)$)
+		(5-5.south west) rectangle ($(5-5.north west)!\fpeval{6140419 / 9692642}!(5-5.north east)$)
+		(6-5.south west) rectangle ($(6-5.north west)!\fpeval{5424137 / 9692642}!(6-5.north east)$)
+		(7-5.south west) rectangle ($(7-5.north west)!\fpeval{5257941 / 9692642}!(7-5.north east)$)
+		(8-5.south west) rectangle ($(8-5.north west)!\fpeval{5217075 / 9692642}!(8-5.north east)$)
+		(9-5.south west) rectangle ($(9-5.north west)!\fpeval{4085708 / 9692642}!(9-5.north east)$);
+	% Don't forget the ; at the end or tikz will crash!
+	
+	% This can be automrated using the tabularray library "functional"
+	% and not having to copy-paste numbers anymore, but this is more complex to do!
+	% Such example is implemented in Appendix B 
+\end{tblrtikzbelow}
+
+% Original design and table from  https://www.storytellingwithdata.com/blog/2012/02/grables-and-taphs
+\begin{tblr}{
+	colspec={lcccQ[2.5cm]},
+	row{1} = {c, m, font=\bfseries, gray9},
+}
+	Borough & {Trust \\ rank} & {Index \\ rank } & {Number \\ of grants} & Amount approved (£) \\
+	Tower Hamlets          & 1  & 3  & 269 & 9692642 \\
+	Hackney                & 2  & 2  & 225 & 7809608 \\
+	Southwark              & 3  & 12 & 232 & 7266118 \\
+	Camden                 & 4  & 14 & 136 & 6140419 \\
+	Islington              & 5  & 4  & 156 & 5424137 \\
+	Lambeth                & 6  & 8  & 156 & 5257941 \\
+	Newham                 & 7  & 2  & 154 & 5217075 \\
+	Hammersmith and Fulham & 8  & 13 & 109 & 4085708 \\
+\end{tblr}
+\end{Code}
+\end{adjustwidth}
+
+You will notice how the tikz code is completely separated from the rest of the table, leaving the data very easy to read and separated from the styling.
+
+\begin{warningbox}{}
+tabularray's tikz library is \emph{experimental}: it might or might not evolve in future versions with possible compatibility breaks, even though nothing of the sort is currently planned.
+\end{warningbox}
+
+\section{Diagonal separations with diagbox}
+
+Let us finish this tutorial with a very short section, you already suffered more than enough \emoji{grinning}.
+
+By adding \snippet{\textbackslash UseTblrLibrary\{diagbox\}} in the preamble, you can add diagonal separations in a cell, using the commands \snippet{\textbackslash diagbox\{text 1\}\{text 2\}} or \snippet{\textbackslash diagboxthree\{text 1\}\{text 2\}\{text 3\}}.
+
+\begin{Code}[show-output]
+% \UseTblrLibrary{diagbox}  % in the preamble
+
+\begin{tblr}{
+	colspec={c|ccc},
+}
+	\diagbox{Day}{Rommate} & Martin & Emma & Julie\\ \hline
+	Monday & Dishes & & Cooking\\
+	Tuesday & Cooking & Dishes & \\
+	Wednesday & & Cooking & Dishes \\
+	Thursday & Dishes & & Cooking \\ 
+	Friday & Cooking & Dishes & \\
+	Saturday & & Cooking & Dishes \\
+	Sunday & & & \\
+\end{tblr}
+\end{Code}
+
+\begin{infobox}{TL;DR}
+tabularray offers some libraries with extra functionalities, they can be loaded with \snippet{\textbackslash UseTblrLibrary\{the\_library\_name\}} in the preamble. Among these libraries:
+
+\begin{itemize}
+	\item The library \snippet{tikz}, which allows to draw on top (with the environment \snippet{tblrtikzabove}) or below (with the environment \snippet{tblrtikzbelow}) your table. Each cell is given a tikz node named \snippet{(i-j)} and each intersection is given a tikz node named \snippet{(hi-|vj)}.
+	\item The library \snippet{diagbox} allows to create cells with a diagonal separator, with \snippet{\textbackslash diagbox\{text 1\}\{text 2\}} or \snippet{\textbackslash diagboxthree\{text 1\}\{text 2\}\{text 3\}}.
+\end{itemize}
+
+\textbf{\underline{Exercise:}} recreate the table below.
+
+\begin{center}
+	\begin{standalonebox}
+% \usetikzlibrary{fadings}  % in the preamble
+% \UseTblrLibrary{diagbox}  % in the preamble
+
+\begin{tblrtikzabove}
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(2-2.center) -- (2-10.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(3-3.center) -- (3-12.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(4-3.center) -- (4-7.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(5-5.center) -- (5-12.center);
+	
+	\draw [red!80!white, line width=5pt, ->, path fading=east,
+	postaction={draw, green!80!white, path fading=west}]
+	(6-3.center) -- (6-10.center);
+\end{tblrtikzabove}
+
+\begin{tblr}{
+	colspec={r|ccccccccccc},
+	colsep={4pt},
+	rows={15pt},
+}
+	\diagboxthree{Country}{Postquantum \\ migration}{Year} & 2025 & 2026 & 2027 & 2028 & 2029 & 2030 & 2031 & 2032 & 2033 & 2034 & 2035 \\ \hline
+	Australia &&&&&&&&&&&\\ % 2026-2030 
+	ENISA (EU) &&&&&&&&&&&\\ % 2026-2035
+	India &&&&&&&&&&&\\ % 2026-2033
+	NSA (USA)  &&&&&&&&&&&\\ % 2025-2033	
+	United Kingdom &&&&&&&&&&&\\ % 2028-2035
+\end{tblr}
+	\end{standalonebox}
+\end{center}
+
+In order to draw such arrows from node \snippet{(XXX)} to node \snippet{(YYY)}, you can use the command \snippet{\textbackslash draw [red!80!white, line width=5pt, ->, path fading=east, postaction=\{draw, green!80!white, path fading=west\}] (XXX.center) -- (YYY.center);}. You will have to add \snippet{\textbackslash usetikzlibrary\{fadings\}} in the preamble.
+
+In order to make your table prettier, make it so your rows are at least \snippet{12pt} high, and columns have a \snippet{4pt} separation.
+
+The solution is given in \Cref{app:libraries_solution}.
+\end{infobox}
+
+
+You have finished this tutorial. Congratulations \emoji{tada}! 
+
+One last word, we said in the introduction that it was always possible to make tables in native Latex, without the tabularray package. You will find on the next page a quick comparison between the two solutions, slightly modified from \url{https://tex.stackexchange.com/a/760558/430417}
+
+You will also find below some appendix, that contain some helpers to check your tabularray version, a FAQ and some extra crunchy details about tabularray, and the solution to the exercises.
+
+\begin{standalonebox}
+\begin{tblr}{
+		width={\linewidth},
+		colspec={*{3}{X[l]}},
+		row{1}={c},
+		vlines = {2-Z}{},
+		hlines,
+		hline{1} = {0pt},
+	}
+	Feature&\texttt{tabularray}&Traditional \texttt{tabular}s\\
+	Complex column specifications. For example, a fixed-width centered column&\SetCell{green!30} Easy. For example, \texttt{Q[c,3cm]}&\SetCell{yellow!30} Not so easy for a newbie. For example, \texttt{>\{\textbackslash centering \textbackslash arraybackslash\}p\{3cm\}}\\
+	Row vertical alignment&\SetCell{green!30} Easy with \texttt{valign}: \texttt{t} (top), \texttt{m} (middle), \texttt{b} (bottom), \texttt{h} (head) or \texttt{f} (foot)&\SetCell{red!30} A nightmare\\
+	Fixed row height &\SetCell{green!30} Easily customizable with \texttt{ht}&\SetCell{red!30} A nightmare\\
+	Vertical space above/below the rows &\SetCell{green!30} Easily customizable with \texttt{rowsep}/\texttt{abovesep}/\texttt{belowsep}&\SetCell{yellow!30} Difficult. You have to redefine \texttt{\textbackslash arraystretch} or set \texttt{\textbackslash extrarowheight} \\
+	Cell text with a new line at a desired position (for columns without a fixed width)&\SetCell{green!30} Perfect. Just use \texttt{\{...\textbackslash\textbackslash...\}}&\SetCell{green!30} No problem, but you need \texttt{makecell}\\
+	Colored rows with \texttt{booktabs}&\SetCell{green!30} Perfect. No gaps left&\SetCell{red!30} Horrible. White gaps between rules and rows\\
+	Multirow text vertical centering&\SetCell{green!30} Easy, including the spanning of the non-multirow rows&\SetCell{red!30} A nightmare. You need a manual adjustment if some of the non-multirow rows are more than one line\\
+	Automating. For example, text file (\texttt{.csv}) processing with \texttt{csvsimple-l3}& \SetCell{green!30} Easy because it's possible to totally separate the styles and the contents of the table& \SetCell{yellow!30} Sometimes you need to modify your input. For example, if you need a multirow\\
+	Draw pictures above or below your table& \SetCell{green!30} Easy with \texttt{tikz} library&
+	\SetCell{yellow!30} More complex. You need to fine-tune the positions \\
+	Speed& \SetCell{red!30} Slow &	\SetCell{green!30} No problems \\
+	PDF tagging& \SetCell{red!30} Not supported&
+	\SetCell{green!30} Supported \\
+	Journals/University acceptings& \SetCell{yellow!30} Since it is a relatively new package, some journals or university rules could not accept it&
+	\SetCell{green!30} Generally, no problems \\
+\end{tblr}
+\end{standalonebox}

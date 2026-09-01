@@ -1,0 +1,120 @@
+\chapter{Multipage tables}\label{sec:multipage}
+
+Let us now focus to very long tables. All the tables we saw until now could easily fit in a single page, even though that sometimes meant that Latex would move the table to the next page. 
+
+But sometimes, our tables are really too long even for a full page. It is then necessary to split your table on several pages, and tabularray has a command just for that, namely the environment \snippet{longtblr}.
+
+\begin{Code}
+\begin{longtblr}{
+	colspec={ll},
+	row{1} = {font=\bfseries},
+}
+	Country & Capital \\ \hline
+	Afghanistan & Kabul \\
+	Albania & Tirana \\
+	Algeria & Algiers \\
+	Andorra & Andorra la vella
+	Angola & Luanda \\
+	Antigua and Barbuda & Saint John's \\
+	% ... 
+	Yemen & Sanaa \\
+	Zambia & Lusaka \\
+	Zimbabwe & Harare
+\end{longtblr}
+\end{Code}
+
+I include screenshots of the beginning and end of the first page, of any page in the middle, and the end of the last page:
+
+\begin{center}
+\includegraphics[width=\linewidth]{../img/raw_head}
+
+\includegraphics[width=\linewidth]{../img/raw_bottom}
+
+\includegraphics[width=\linewidth]{../img/raw_continued}
+
+%\includegraphics[width=\linewidth]{img/raw_continued_bottom}
+
+\includegraphics[width=\linewidth]{../img/raw_end}
+
+\end{center}
+
+You can see that the table is automatically horizontally centered, with an empty caption. Some text is also automatically added at the bottom of the page (\textit{Continued on next page}), and the beginning of the following pages (\textit{Continued}).
+
+All these details can be modified. You can also decide of how many rows will be systematically displayed at the top or the bottom of every page. Of how to display the caption. Of many other things still, but these are the main ones. These choices must be declared as an option to \snippet{longtblr}. Other choices must be defined in what tabularray calls templates. It is not very practical but it is how it is.
+
+\begin{Code}
+
+\highLight{\DeclareTblrTemplate{contfoot-text}{default}{(The table continues on the next page)}} 
+\highLight{\DeclareTblrTemplate{conthead-text}{default}{(Continued from the previous page)}}
+
+\begin{longtblr}[
+	\highLight{caption={All countries and their capital(s)},}
+	\highLight{label={table:all_countries},}
+]{
+	colspec={ll},
+	\highLight{rowhead=1,}  % First row will be displayed on every page of the table
+	\highLight{rowfoot=1,}  % Last row will be displayed on every page too
+	row{odd}= {gray!30},
+	row{1} = {font=\bfseries, blue!30},  % appears on every page with rowhead
+	row{Z} = {font=\itshape, blue!30},
+}
+	Country & Capital \\ \hline
+	Afghanistan & Kabul \\
+	Albania & Tirana \\
+	Algeria & Algiers \\
+	% ... 
+	Yemen & Sanaa \\
+	Zambia & Lusaka \\
+	Zimbabwe & Harare \\
+	\highLight{Country & Capital \\ \hline}  % Repeated on every page thanks to rowfoot
+\end{longtblr}
+\end{Code}
+
+\begin{center}
+	\includegraphics[width=\linewidth]{../img/pretty_head}
+	
+	\includegraphics[width=\linewidth]{../img/pretty_bottom}
+	
+	\includegraphics[width=\linewidth]{../img/pretty_continued}
+	
+%	\includegraphics[width=\linewidth]{../img/pretty_continued_bottom}
+	
+	\includegraphics[width=\linewidth]{../img/pretty_end}
+	
+\end{center}
+
+\begin{warningbox}{longtblr and compilation time}
+	\snippet{longtblr} are quite slow to compile. If your document takes time to compile, look if you can use an alternative such as \snippet{longtable}. Do not use \snippet{longtblr} instead of \snippet{tblr} if your table fits in one page!
+\end{warningbox}
+
+One last thing: as we saw, long tables are, by default, horizontally centered. If for any reason you would like to change that, you can use the exterior attribute \snippet{halign}, which can be equal to \snippet{l}, \snippet{c}, \snippet{r}. This is not mentioned anywhere in tabularray documentation but it's always good to know \emoji{slightly-smiling-face}.
+
+\begin{Code}
+\begin{longtblr}[
+	\highLight{halign=l,}
+	caption={All countries and their capital(s)},
+	label={table:all_countries},
+	]{
+		colspec={ll},
+		rowhead=1,
+		rowfoot=1,
+		row{odd}= {gray9},
+		row{1} = {font=\bfseries, blue9},
+		row{Z} = {font=\itshape, blue9},
+	}
+	Country & Capital \\ \hline
+	Afghanistan & Kabul \\
+	Albania & Tirana \\
+	% ...
+\end{Code}
+
+\begin{infobox}{TL;DR}
+	\begin{itemize}
+		\item Use \snippet{longtblr} environment for multipage tables
+		\item You can specify ``glued'' first and last rows of a longtblr with \snippet{rowhead} and \snippet{rowfoot}, they will appear on every page (for instance, \snippet{rowhead=2})
+		\item In option of the \snippet{longtblr} environment, you can give a caption with \snippet{caption=\{...\}}, a name with \snippet{label=\{...\}}, horizontal alignment with \snippet{halign=l} (or \snippet{c}, \snippet{r})
+		\item Using templates, you can chose other options, such as personalization of continuation texts with \snippet{\textbackslash DeclareTblrTemplate\{contfoot-text\}\{my-foot\}\{continuation text\} \textbackslash SetTblrTemplate\{contfoot-text\}\{my-foot\}}, same for \snippet{conthead-text}.
+	\end{itemize}
+
+No exercise for this chapter because I don't want to make you code long multipage tables \emoji{grinning}.
+\end{infobox}

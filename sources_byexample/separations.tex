@@ -1,0 +1,61 @@
+\section{Manage separations and spacing}
+
+\subsection{Add all separation lines}
+
+\begin{Code}[show-output]
+\begin{tblr}{\highLight{hlines}, \highLight{vlines}, colspec = {cccccccc}}
+       & Monday   & Tuesday  & Wednesday & Thursday  & Friday   & Saturday & Sunday \\
+Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
+Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers\\
+\end{tblr}
+\end{Code}
+
+
+\subsection{Manage row and column spacing}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec = {lll}, hlines,
+	\highLight{rowsep = {8pt},}  % default tabularray value is 2pt
+	\highLight{colsep = {1pt},}  % default tabularray value is 6pt
+}
+	cell 1 & cell 2             & cell $\frac{3}{3}$ \\
+	cell 4 & cell $\frac{5}{6}$ & cell 6 \\
+\end{tblr}
+\end{Code}
+
+\subsection{Manage merged cell expansion}
+
+By default, merged cells will try to fit the contents of the merged cell on one line. If needed, only the last column (or last row) will be extended, but you can change this behaviour.
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={llll},
+	vlines,
+	hlines,
+	\highLight{hspan=minimal},
+	\highLight{vspan=even},
+}
+	\SetCell[r=2]{m} {Mur, ville, \\ Et port, \\ Asile \\ De mort, \\ Mer grise \\ Où brise \\ La brise, \\ Tout dort.} & Les Djinns & Victor Hugo & 1829 \\
+	& \SetCell[c=3]{l} A beautiful poem in which each stanza has a different metrical structure. & & \\
+\end{tblr}
+\end{Code}
+
+The possible values for \snippet{hspan} are \snippet{default} (only the last column is extended), \snippet{even} (all the columns covering a merged cell will be extended by the same amount), or \snippet{minimal} (the columns will not be extended, the text of the merged cell will wrap on several lines).
+
+The values for \snippet{vspan} are \snippet{default} and \snippet{even}.
+
+Compare the above example with e.g.
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec={llll},
+	vlines,
+	hlines,
+	\highLight{hspan=even},
+	\highLight{vspan=default},
+}
+	\SetCell[r=2]{m} {Mur, ville, \\ Et port, \\ Asile \\ De mort, \\ Mer grise \\ Où brise \\ La brise, \\ Tout dort.} & Les Djinns & Victor Hugo & 1829 \\
+	& \SetCell[c=3]{l} A beautiful poem in which each stanza has a different metrical structure. & & \\
+\end{tblr}
+\end{Code}

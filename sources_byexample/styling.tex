@@ -1,0 +1,136 @@
+\section{Let's add some styling}
+
+\subsection{A bit of colour and formatting}
+
+Until tabularray version 2025C, you need to load the package \snippet{xcolor} in your preamble to add colors to your table.
+
+\begin{Code}[show-output]
+\begin{tblr}{llllll}
+	Company  & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO    & +150k & -300k & +210k & +150k & \SetCell{font={\small\ttfamily},green!80!black} +210k \\
+	McDalle  & -120k & -200k & -200k & +250k & \SetCell{font={\small\ttfamily},red!60} -270k \\
+	FireCar  & +150k & +300k & +450k & +150k & \SetCell{font={\small\ttfamily},green!80!black} +1050k \\
+\end{tblr}
+\end{Code}
+
+Since we are not merging cells, we do not need to write the optional argument of \snippet{\textbackslash SetCell}.
+
+\subsection{Style in the header, style in the body}
+
+The styling of the above table can also be specified in the header of the table. This allows to fully separate the data from its formatting and is a major functionality from tabularray.
+
+\begin{Code}
+\begin{tblr}{
+	colspec={llllll},
+	\highLight{cell{2,4}{6} = {green!80!black},}
+	\highLight{cell{3}{6} = {red!60},}
+	\highLight{cell{2-4}{1} = {font={\ttfamily\small}},}
+}
+	Company  & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
+	COSTO    & +150k & -300k & +210k & +150k & +210k \\
+	McDalle  & -120k & -200k & -200k & +250k & -270k \\
+	FireCar  & +150k & +300k & +450k & +150k & +1050k \\
+\end{tblr}\end{Code}
+
+The cell from row \snippet{i} and column \snippet{j} is selected by the keyword \snippet{cell\{i\}\{j\}}. Several indexes can be selected with a comma: \snippet{\{2,4\}}, or by a range \snippet{\{3-8\}}. Applying the same style to two cells with very different coordinates is possible: \snippet{cell\{\{1\}\{2\}, \{3\}\{5\}\}} will select both \snippet{cell\{1\}\{2\}} and \snippet{cell\{3\}\{5\}}.
+
+Cells can also be merged from the header: \snippet{cell\{i\}\{j\} = \{r=2,c=3\}\{m, red\}}. You can leave the second mandatory argument empty \snippet{\{\}} if no further styling, besides the merging, is required.
+
+\subsection{Style of a row, style of a column}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec = {rllllll},
+	\highLight{cells = {font=\itshape},}
+	\highLight{columns = {2cm, m},}
+	\highLight{column{1} = {1cm},}
+	\highLight{row{1} = {ht=1cm,blue!50},}
+	colsep=4pt,
+	rowsep=1pt,
+	cell{1}{2} = {c=6}{c},
+	cell{2}{1} = {r=4}{m,blue!70},
+}
+	& Alphabets & & & & & \\ \hline
+	Greek & {Alpha \\ $\alpha$} & {Beta \\ $\beta$} & {Gamma \\ $\gamma$} & {Delta \\ $\delta$} & {Epsilon \\ $\varepsilon$} & {Zeta \\ $\zeta$} \\
+	& {Eta \\ $\eta$} & {Theta \\ $\theta$} & {Iota \\ $\iota$} & {Kappa \\ $\kappa$} & {Lambda \\ $\lambda$} & {Mu \\ $\mu$} \\
+	& {Nu \\ $\nu$} & {Xi \\ $\xi$} & {Omikron \\ o} & {Pi \\ $\pi$} & {Rho \\ $\rho$} & {Sigma \\ $\sigma$, $\varsigma$} \\
+	& {Tau \\ $\tau$} & {Upsilon \\ $\upsilon$} & {Phi \\ $\varphi$} & {Chi \\ $\chi$} & {Psi \\ $\psi$} & {Omega \\ $\omega$}\\
+\end{tblr}
+\end{Code}
+
+The example above illustrates how priority rules apply to styling: for a given property, the last written instruction (either in the header or in the body) will be the one applied. Here, the column 1 will be 1cm wide, because the instruction for \snippet{column\{1\}} was written after the instruction \snippet{columns}. If the instructions would be permuted, the column would be 2cm wide.
+
+\subsection{Border style}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	\highLight{hline{1} = {2-8}{dashed}},
+	\highLight{hline{2-4} = {1-8}{}},
+	\highLight{vline{1} = {2-3}{red, dotted, 2pt}},
+	\highLight{vline{2-9} = {1-3}{green}},
+	colspec = {cccccccc},
+}
+       & Monday   & Tuesday  & Wednesday & Thursday & Friday    & Saturday & Sunday \\
+Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
+Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers\\
+\end{tblr}
+\end{Code}
+
+Similarly to columns and rows, horizontal lines (\snippet{hlines}) and vertical lines (\snippet{vlines}) can be individually selected, or by group or range. Thus \snippet{hline\{1\} = \{red\}} will make the first horizontal line red. Note that the first horizontal line is situated above the first row.
+
+Lines can be \snippet{solid} (default), \snippet{dotted} or \snippet{dashed}. Thickness can be personalized (for instance, \snippet{2pt}). 
+
+Lines do not have to run through the whole table. For instance, \snippet{vline\{1\} = \{2-3\}\{red, dotted\}} is drawing a vertical red line before the first column, from hline index 2 to hline index 3. Note that if a line is partial, the second styling argument must be specified, even if no styling is applied. The default styling instructions for a line are \snippet{1pt, solid, black}.
+
+You can give the same style to all vlines/hlines: \snippet{hlines = \{green, 2pt\}}.
+
+\subsection{Advanced selectors}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec = {lll},
+	hline{1,\highLight{Z[2]}} = {2-\highLight{Z}}{2pt, red},
+	row{\highLight{odd[3]}} = {gray!20},
+	row{\highLight{Z}} = {font=\bfseries},
+}
+	Subject & {Reaction time (s)} & {Pain (EVA scale)} \\ \hline
+	Subjet 1 & 0:03 & 3 \\
+	Subjet 2 & 0:08 & 7 \\
+	Subjet 3 & 0:01 & 4 \\
+	AVERAGE  & 0:04 & 4.67
+\end{tblr}
+\end{Code}
+
+The last index can be selected with \snippet{Z}. Since tabularray 2025A and later, the one before last can be selected with \snippet{Z[2]}, etc. Odd/even indexes can be selected with \snippet{odd}, \snippet{even}. The selection can start at index, say 5, with \snippet{odd[5]}.
+
+\subsection{Smart selections with class and id}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	colspec = {lllllll},
+	row{1} = {c, font=\bfseries\large},
+	\highLight{cell{personalbest} = {font=\bfseries},}
+	\highLight{cell{Gold} = {yellow!90!black},}
+	\highLight{cell{Silver} = {gray!80},}
+	\highLight{cell{Bronze} = {brown},}
+}
+	Athlete & \#1 & \#2 & \#3 & \#4 & \#5 & \#6 \\ \hline
+	Chase Jackson    & 19.55 & x & 19.43 & 19.67 & x & \highLight{\SetChild{class=personalbest,id=Silver}} 20.21 \\
+	Fanny Roos       & 19.33 & 19.07 & 18.99 & 18.91 & 18.83 & \highLight{\SetChild{class=personalbest}} 19.54 \\
+	Jessica Schilder & 18.23 & 18.68 & 19.24 & 19.51 & 18.76 & \highLight{\SetChild{class=personalbest,id=Gold}} 20.29 \\
+	Maddi Wesche     & \highLight{\SetChild{class=personalbest,id=Bronze}} 20.06 & x & 19.90 & x & 18.87 & x \\
+	Sarah Mitton     & 19.76 & 19.18 & \highLight{\SetChild{class=personalbest}} 19.81 & 19.75 & 19.80 & 19.62 \\
+	Yemisi Ogunleye  & \highLight{\SetChild{class=personalbest}} 19.33 & x & x & 18.62 & 18.73 & 18.89 \\
+\end{tblr}
+\end{Code}
+
+\begin{warningbox}{Minimal tabularray version}
+	class and id are only available if your tabularray version is 2025A or above.
+\end{warningbox}
+
+
+A class name must be alphabetic, full lowercase. An id name must be alphabetic, and the first letter must be uppercase, the rest lowercase. There can be several times the same class in a table, but only the last use of a given id will be kept in memory.
+
+\begin{errorbox}{Styling a non-existing class or id}
+	If you add a styling instruction for a class or id that is not present in the table body, until version 2026A the compilation will fail with a cryptic error message, e.g.: \texttt{Undefined control sequence. \textbackslash l\_\_tl\_tmpa\_tl ->\textbackslash \_\_tblr\_child\_selector\_missingclass}
+\end{errorbox}

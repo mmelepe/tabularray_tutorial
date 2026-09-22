@@ -1,0 +1,62 @@
+% !TeX lualatex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% MUST COMPILE WITH LUALATEX %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[oneside]{book}
+\usepackage[a4paper]{geometry}
+\geometry{textwidth=15.75cm, textheight=23.4cm, marginratio={4:6,5:7}}
+\setlength{\parskip}{0.7\baselineskip} 
+
+\input{../sources/preamble}
+
+\newcommand{\ManualTitle}{\texttt{tabularray} by example}
+\newcommand{\ManualSubtitle}{A compact tutorial for modern and powerful \LaTeX\ tables}
+\newcommand{\ManualAuthor}{melepe (mmelepe@gmail.com)}
+\newcommand{\ManualVersion}{Version 1.1}
+\newcommand{\CompilationDate}{\today}
+\newcommand{\LongVersion}{\url{https://github.com/mmelepe/tabularray_tutorial/blob/master/latest.pdf}}
+\newcommand{\LatestVersion}{\url{https://github.com/mmelepe/tabularray_tutorial/blob/master/latest_compact.pdf}}
+
+\begin{document}
+	
+	\input{titlepage}
+	
+	\chapter*{Introduction}
+	Creating tables in \LaTeX can be difficult. Luckily, in 2021 the tabularray package was created, offering a simple united interface for most functionalities you will ever need, and then some.
+	
+	\begin{infobox}{Target audience}
+		This short version, non-official tutorial, is aimed at people who already have some experience in Latex and just want a quick reference to learn tabularray. It showcases examples of tabularray uses, with a small explanation.
+		
+		A more detailed tutorial for beginners (or people who wish to understand this package more in depth) is available at \url{https://github.com/mmelepe/tabularray_tutorial/blob/master/latest.pdf}.
+	\end{infobox}
+	
+	\tableofcontents
+	
+	\chapter{Simple tables without hassle}
+	
+	\input{basic_tables}
+	\input{column_control}
+%	
+	\chapter{More hassle with less simple tables}
+	\input{separations}
+	\input{styling}
+	\input{multipage}
+	\input{libraries}
+%	
+%	\appendix
+%	\crefalias{chapter}{appendix}
+%	\crefalias{Chapter}{Appendix}
+%	\crefalias{section}{appendix}
+%	\crefalias{Section}{Appendix}
+%	
+%	\input{app_version}
+%	\input{app_functional}
+%	\input{app_colspec}
+%	
+%	
+%	\input{solutions}
+	
+	
+\end{document}

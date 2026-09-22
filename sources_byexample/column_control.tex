@@ -1,0 +1,103 @@
+\section{Column control}
+
+\subsection{Control column width and vertical alignment}
+
+\begin{Code}[show-output]
+\begin{tblr}{\highLight{|Q[l,2cm,b]|Q[r,2cm,t]|Q[2cm,m]|Q[2cm,m]|Q[2cm,h]|Q[2cm,f]|}}
+	\hline
+	Column set to \texttt{Q[l,2cm,b]} & Column set to \texttt{Q[r,2cm,t]} & Column set to \texttt{Q[2cm,m]} & Column set to \texttt{Q[2cm,m]} with a lot of text that is going on forever to show the difference between \texttt{t} and \texttt{f} alignment & Column set to \texttt{Q[2cm,h]} & Column set to \texttt{Q[2cm,f]}\\
+	\hline
+\end{tblr}
+\end{Code}
+
+Columns are technically all of \snippet{Q} type. A \snippet{Q} column can take optional arguments in any order, such as:
+
+\begin{itemize}
+	\item The horizontal alignment\footnote{A \snippet{Q[l]} column is equivalent to a \snippet{l} column, and so on. However, an \snippet{l} column cannot receive additional arguments, whereas a \snippet{Q} column can: \snippet{Q[l,2cm,f]}.} (\snippet{l}, \snippet{c}, \snippet{r}, \snippet{j}). Default value is \snippet{j}.
+	\item The column width (in the example above, in \snippet{cm} but any unit of length, see e.g. \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}, is valid). By default, a column will extend as much as possible so that all cells text fit on one line, which might cause the table to overflow.
+	\item The vertical alignment. The possible values are: \snippet{h} (\textbf{h}ead, positions the text at the top of the cell), \snippet{f} (\textbf{f}oot, positions the text at the bottom of the cell), \snippet{t} (sets the baseline of the cell at the \textbf{t}op of the text block), \snippet{m} (sets the baseline at the \textbf{m}iddle of the text block), \snippet{b} (sets the baseline at the \textbf{b}ottom of the text block). Default value is \snippet{m}.
+\end{itemize}
+
+Other options are available, and we will see some of these below.
+
+Note that \snippet{h} and \snippet{b} options are not equivalent, neither are \snippet{f} and \snippet{t}.
+
+
+\subsection{Multiline cells}
+
+\begin{Code}[show-output]
+\begin{tblr}{lQ[l,m]Q[l,m]}
+	Country & Capital(s)             & Comment \\ \hline
+	Belize  & Belmopan               & N/A \\
+	Bénin   & \highLight{{Porto-Novo \\ Cotonou}} & \highLight{{Official capital \\ De facto administrative capital}}\\
+	Bhutan  & Thimphu                & N/A \\
+\end{tblr}
+\end{Code}
+
+Multiline cells must be delimited by \{\}. They can be vertically centered, by selecting the desired alignment in the colspec.
+
+
+\subsection{Variable width column}
+
+\begin{Code}[show-output]
+\begin{tblr}{
+	\highLight{width=0.9\linewidth},
+	colspec={ll|\highLight{X}|\highLight{X[2,r]}|},
+}
+	Furniture & Price & Shop     & Grade \\ \hline
+	Bed       & 150   & MOBILI   & 6/10 \\
+	Table     & 800   & LUXTABLE & 8/10 \\
+	Desk      & 300   & LBC      & 7/10 \\
+\end{tblr}
+\end{Code}
+
+\begin{warningbox}{Multiple arguments in a tabularray header}
+	The example above passes another argument to tabularray (namely, the table width). Consequently, the colspec \textit{must} be specified by using the keyword \snippet{colspec}. Keywords must be separated by a comma \snippet{,}.
+	
+	There can be no empty lines in the tabularray header. This would cause a compilation error.
+\end{warningbox}
+
+
+\snippet{X} columns are columns of varying width. tabularray will automatically adjust their width so the table spans the whole line width, or whatever value is the header attribute \snippet{width} set to (if the attribute \snippet{width} is not set, it defaults to the line width).
+
+\snippet{X} columns can receive any other argument that \snippet{Q} columns can receive, e.g. \snippet{X[r]} is a right-aligned \snippet{X} column\footnote{Technically, an \snippet{X[n]} column, with n a coefficient, is an alias to a \snippet{Q[co=n]} column.}.
+
+In case there are several \snippet{X} columns, the extra width is equally distributed among them. This distribution can be weighted by passing any number value (a coefficient) as an argument to the \snippet{X} column. In the example above, the fourth column is twice as large as the third. Default coefficient for an \snippet{X} column is 1.
+
+The coefficient in the \snippet{X} column can be any value (possibly decimal). It can also be negative. For instance, \snippet{X[-2.5]} means that the column will expand \textit{at maximum} with coefficient 2.5, but will be smaller if the text in the column does not require that much space and other \snippet{X} columns can fill the remaining space.
+
+
+\begin{Code}[show-output]
+\begin{tblr}{|X|X[-2.5]|}
+	\hline
+	coeff +1 & coeff -2.5 \\ \hline
+\end{tblr}
+\end{Code}
+
+
+\subsection{Merged cells}
+
+\begin{Code}[show-output]
+\begin{tblr}{|l|l|l|l|l|}
+	\hline
+	1 & 2                                & 3 & \highLight{\SetCell[c=2]{}} 4,5  & hidden!\\ \hline
+	1 & \highLight{\SetCell[r=2,c=3]{r,m,4cm}} 2,3,4 & 0 & 0                    & 5 \\ \hline
+	\highLight{\SetCell[r=2]{f}} 1 &                 &   &                      & 5 \\ \hline
+	0 & 2                                & 3 & 4                    & 5 \\ \hline
+\end{tblr}
+\end{Code}
+
+To merge cells, you have to use the command \snippet{\textbackslash SetCell} and specify the merging within the optional argument. For instance, \snippet{\textbackslash SetCell[r=2]\{\}} says that the cell will span two rows, starting from the current cell. \snippet{\textbackslash SetCell[c=4]\{\}} will span the current cell over 4 columns.
+
+Merged cells must still be specified in the table body with the ampersands \snippet{\&}, even though their contents will be overwritten. Their contents may be empty.
+
+The mandatory argument of \snippet{\textbackslash SetCell[]\{\}} can receive any cell formatting instruction, e.g. a width, horizontal/vertical alignment, etc. For instance, \snippet{\textbackslash SetCell[r=2,c=3]\{r,m,4cm\}} merges the cells on the next 2 rows and 3 columms, and the resulting merged cell will be right aligned, vertically centered, and 4 cm wide.
+
+
+\vfill
+
+\begin{infobox}{}
+	Most tables do not need more functionalities than what you have seen so far. Feel free to browse the rest of the document for more advanced features.
+\end{infobox}
+
+\vfill

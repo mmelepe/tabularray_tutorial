@@ -1,0 +1,96 @@
+\section{Multipage tables}
+
+\begin{Code}
+\highLight{\DeclareTblrTemplate{contfoot-text}{default}{(The table continues on the next page)}}
+\highLight{\DeclareTblrTemplate{conthead-text}{default}{(Continued from the previous page)}}
+% Only if you want to change the default text
+
+\begin{\highLight{longtblr}}[
+	\highLight{caption={First 40 UN countries by alphabetical order and their official capital}},
+	\highLight{label={table:all_countries}},
+	\highLight{halign=l},
+	]{
+		colspec={ll},
+		\highLight{rowhead=1}, 
+		\highLight{rowfoot=1},
+		row{odd}= {gray!30},
+		row{1} = {font=\bfseries, blue!30},
+		row{Z} = {font=\itshape, blue!30},
+	}
+	Country & Capital \\ \hline
+	Afghanistan & Kabul \\
+    % ...
+	Costa Rica & San Jose \\
+	\highLight{Country & Capital \\ \hline}  % Repeating bottom row thanks to rowfoot
+\end{longtblr}
+\end{Code}
+
+
+\DeclareTblrTemplate{contfoot-text}{default}{(The table continues on the next page)}
+\DeclareTblrTemplate{conthead-text}{default}{(Continued from the previous page)}
+
+\begin{longtblr}[
+	caption={First 40 UN countries by alphabetical order and their official capital},
+	label={table:all_countries},
+	halign=l,
+]{
+	colspec={ll},
+	rowhead=1,  % First row will be displayed on every page of the table
+	rowfoot=1,  % Last row will be displayed on every page too
+	row{odd}= {gray!30},
+	row{1} = {font=\bfseries, blue!30},  % appears on every page with rowhead
+	row{Z} = {font=\itshape, blue!30},
+}
+	Country & Capital \\ \hline
+	Afghanistan & Kabul \\
+	Albania & Tirana \\
+	Algeria & Algiers \\
+	Andorra & Andorra la Vella \\
+	Angola & Luanda \\
+	Antigua and Barbuda & Saint John’s \\
+	Argentina & Buenos Aires \\
+	Armenia & Yerevan \\
+	Australia & Canberra \\
+	Austria & Vienna \\
+	Azerbaijan & Baku \\
+	Bahamas & Nassau \\
+	Bahrain & Manama \\
+	Bangladesh & Dhaka \\
+	Barbados & Bridgetown \\
+	Belarus & Minsk \\
+	Belgium & Brussels \\
+	Belize & Belmopan \\
+	Benin & Porto-Novo \\
+	Bhutan & Thimphu \\
+	Bolivia & Sucre \\
+	Bosnia and Herzegovina & Sarajevo \\
+	Botswana & Gaborone \\
+	Brazil & Brasília \\
+	Brunei & Bandar Seri Begawan \\
+	Bulgaria & Sofia \\
+	Burkina Faso & Ouagadougou \\
+	Burundi & Gitega \\
+	Cabo Verde & Praia \\
+	Cambodia & Phnom Penh \\
+	Cameroon & Yaounde \\
+	Canada & Ottawa \\
+	Central African Republic & Bangui \\
+	Chad & N’Djamena \\
+	Chile & Santiago \\
+	China & Beijing \\
+	Colombia & Bogotá \\
+	Comoros & Moroni \\
+	Congo Republic of the & Brazzaville \\
+	Costa Rica & San Jose \\
+	Country & Capital \\ \hline  % Repeated on every page thanks to rowfoot
+\end{longtblr}
+
+
+Multipage tables are defined with the \snippet{longtblr} environment. Its horizontal alignment can be defined with \snippet{halign} (default is \snippet{c}) and is automatically included as a floating table element. The \snippet{caption} and \snippet{label} are defined as outer attributes. 
+
+To repeat rows at the beginning and end of the table on each page, use \snippet{rowhead} and \snippet{rowfoot}. You can repeat more than 1 row at the beginning or end. The repeating row(s) at the bottom must be written at the end of the table.
+
+Continuation text can be personalized in the \snippet{default} templates of tabularray (otherwise the default values apply). You can also use named templates, see the documentation for more details. 
+
+Long tables are significantly slower at compilation than normal tabularray tables, which themselves are significantly slower at compilation than native Latex tables. Do not use longtblr if the table can fit on one page.
+

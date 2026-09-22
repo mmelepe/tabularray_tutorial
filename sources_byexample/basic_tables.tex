@@ -1,0 +1,26 @@
+\section{A basic table}
+
+All tables shown in this tutorial must load the tabularray package in the preamble: \snippet{\textbackslash usepackage\{tabularray\}}.
+
+Let us continue with the first example:
+
+\begin{Code}[show-output]
+% \usepackage{tabularray} in the preamble
+\begin{tblr}{|l|c|r|}
+	\hline
+	Hello & tabularray  & world! \\
+	\hline
+	cell  & cell        & last table cell \\
+	\hline
+\end{tblr}
+\end{Code}
+
+A tabularray environment has a mandatory argument between curly braces, that contains (among others) the column specification. A column specification, or colspec, specifies:
+\begin{itemize}
+	\item the horizontal alignment of each column (left \snippet{l}, center \snippet{c}, right \snippet{r} or justified \snippet{j} for multiline columns). Default value is \snippet{j}
+	\item vertical borders with the pipe character \snippet{|}
+\end{itemize}
+
+The body of the table separates cells by \snippet{\&}, rows by \snippet{\textbackslash\textbackslash}. Horizontal lines are indicated in the body of the table by \snippet{\textbackslash hline}. Space character between cells are ignored. As for line breaks, tabularray might behave incorrectly if there is more than one consecutive line break.
+
+

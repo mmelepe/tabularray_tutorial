@@ -211,7 +211,7 @@ If you don't want the table to span over the whole page width, but still want to
 
 \begin{Code}[show-output]
 \begin{tblr}{
-	\highLight{width=0.7\linewidth,}  % 70 % of maximum line width. One can also input a value in cm, pt or whatever.
+	\highLight{width=0.7\linewidth,}  % 70 % of the line width. One can also input a value in cm, pt...
 	colspec={ll|X|X|},
 }
 	Furniture & Price & Shop     & Comment \\ \hline
@@ -220,6 +220,7 @@ If you don't want the table to span over the whole page width, but still want to
 	Desk      & 300   & LBC      & Essential for remote work \\
 \end{tblr}
 \end{Code}
+
 
 \begin{errorbox}{Blank lines and tabularray}
 There cannot be blank lines in a tabularray header, it would break compilation. For instance, the following table will generate a compilation error:
@@ -258,7 +259,7 @@ Similarly, too many blank lines in the body of the table might cause unexpected 
 tabularray does not guarantee correct results if there are two or more consecutive blank lines. However, lines with only a comment do not count as blank lines.
 \end{errorbox}
 
-For a finer setting of the column size, it is possible to give an argument to the \snippet{X} column. This argument is a priority coefficient, for when there are several \snippet{X} columns in the table. Remember that, by default, the remaining space is distributed equally. Thanks to this coefficent, it is possible to adjust this distribution.
+For a finer setting of the column size, it is possible to give an argument to the \snippet{X} column. This argument, a number, is a priority coefficient, for when there are several \snippet{X} columns in the table. Remember that, by default, the remaining space is distributed equally. Thanks to these coefficents, it is possible to adjust this distribution.
 
 For instance, \snippet{X[2]} is a column that has a coefficient of 2, \snippet{X[3]} has coefficient 3, and so on. By default, \snippet{X} is equivalent to \snippet{X[1]}.
 
@@ -271,13 +272,22 @@ For instance, \snippet{X[2]} is a column that has a coefficient of 2, \snippet{X
 \end{tblr}
 \end{Code}
 
+Another neat feature of the \snippet{X} columns is the fact that they accept negative coefficients. A negative value means that the \snippet{X} column will expand \emph{at most} to the given coefficient, if the text in the column requires that much space, and if there are other \snippet{X} cells that will use the remaining space.
+
+\begin{Code}[show-output]
+\begin{tblr}{|X|X[-2.5]|} \hline 
+	coeff +1 & coeff -2.5 \\ \hline
+\end{tblr}
+\end{Code}
+
+
 Finally, note that \snippet{X} can receive other options, such as horizontal alignment (\snippet{l}, \snippet{c}, \snippet{r}, \snippet{j}), or vertical alignment (\snippet{t}, \snippet{f}...): \snippet{X[3,m,j]} is a valid column.
 
 
 \section{Merged cells}
 Another highly appreciated functionality of tabularray if the ability to merge cells with ease. Let's look at the following table:
 
-\begin{Code}
+\begin{Code}[show-output]
 \begin{tblr}{l|l|l}
 		  & Monday     & Tuesday \\ \hline
 	8:00  & Literature & History \\ \hline
@@ -302,14 +312,14 @@ We can use the command \snippet{\textbackslash SetCell} to do so. Let's first sh
 
 Note that the horizontal line automatically disappeared between the merged cells. Also note that the cell that is ``overwritten'' by the merged cell must still be indicated with a \snippet{\&}, even though it will not be displayed. Its content is irrelevant, as it will be overwritten by the contents of the cell containing the \snippet{\textbackslash SetCell}\footnote{This can lead to frustrating debugging sessions: the text you are writing is not appearing in the table, and you finally realize that you are writing text in a merged cell that is overwritten and therefore the text will never be displayed \emoji{poop}.}.
 
-Let us now explain the \snippet{\textbackslash SetCell} command. It takes an optional argument and a mandatory one:
+Let us now explain the \snippet{\textbackslash SetCell} command. It takes an optional argument between square brackets \snippet{[]} and a mandatory one between curly braces \snippet{\{\}}:
 
 \begin{itemize}
-	\item \snippet{[r=2]} indicates that we will merge 2 \textbf{r}ows together, starting from the cell we are.
+	\item \snippet{[r=2]} indicates that the current cell will span over 2 \textbf{r}ows.
 	\item \snippet{\{l,m\}} indicates the horizontal and vertical alignment of the merged cell. Here, we used \snippet{l,m} so the cell will be left aligned, vertically centered. You had that right? If not, read the chapters on horizontal and vertical alignment again \emoji{slightly-smiling-face}. As a general rule, we can pass to the mandatory argument (in curly braces \snippet{\{\}}) of \snippet{\textbackslash SetCell} any option we could pass to a cell: width, alignment... We can also leave the curly braces empty if we don't want to specify anything.
 \end{itemize}
 
-We can also merge columns together, with the optional argument \snippet{[r=4]} (here, merging 4 columns). Finally, one can merge both rows and columns together:
+We can also merge columns together, with the optional argument \snippet{[c=4]} (here, merging over 4 columns). Finally, one can merge both rows and columns together:
 
 \begin{Code}[show-output]
 \begin{tblr}{|l|l|l|l|l|}
@@ -327,7 +337,7 @@ We can also merge columns together, with the optional argument \snippet{[r=4]} (
 		\item Every column is actually a \snippet{Q} type column: \snippet{Q[l]}, \snippet{Q[c]}, \snippet{Q[r]} or \snippet{Q[j]}.
 		\item Columns can be given a width: \snippet{Q[l, 5cm]}. Cells can also be given a width: \snippet{\textbackslash SetCell\{5cm\}}.
 		\item Baseline alignment is done with the options \snippet{t}, \snippet{m}, \snippet{b} (for example, \snippet{Q[l,m,3cm]}). You can also use the options \snippet{h}, \snippet{f} to respectively position the text at the head (top) or the foot (bottom) of the cell.
-		\item Columns of type \snippet{X} fill all the available space. Their size can be adjusted as follows: \snippet{X[2]}. It can receive other arguments: \snippet{X[2,c,m]}.
+		\item Columns of type \snippet{X} fill all the available space. Their size can be adjusted as follows: \snippet{X[2]}. It can receive other arguments: \snippet{X[2,c,m]}. A negative coefficient gives a maximum expansion for the \snippet{X} column: \snippet{X[-1.5]}.
 		\item Cells are merged with the example command \snippet{\textbackslash SetCell[r=2,c=3]\{l,m\}}, or similar. \snippet{r=} counts the number of merged \textbf{r}ows, \snippet{c=} counts the number of merged \textbf{c}olumns. Here, on top of that, \snippet{l,m} give the merged cell's alignment (left and vertically centered). We can leave the \snippet{\{\}} empty, or conversely write any styling instruction a cell can receive. The text from overwritten cells is not displayed (except the cell containing the \snippet{\textbackslash SetCell}).
 		\item \snippet{\{Multiline \textbackslash\textbackslash~ cell\}} is a multiline cell.
 	\end{itemize}
@@ -354,7 +364,9 @@ The table must have a width of \snippet{0.8\textbackslash linewidth}, the first 
 The solution is available in \Cref{app:solution_control}.
 \end{infobox}
 
-\vfill 
+\newpage
+
+\vspace*{\fill} % \vfill not working zt the beginning of a page because latex ignores any space at the beginning of a page
 
 \begin{infobox}{End of the first part}
 	You now know enough about tabularray to create 99\% of the tables you will ever need to create. You can stop here for your first read-through. Experiment a bit, create your own tables, and when you will feel like it, come back and learn more with the next chapters!

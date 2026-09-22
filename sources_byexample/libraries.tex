@@ -1,0 +1,64 @@
+\section{Tabularray's libraries}
+
+\subsection{Drawing in your table with Tikz}
+
+\begin{warningbox}{Minimal tabularray version}
+	The tikz library is only available from tabularray version 2025A or more recent.
+\end{warningbox}
+
+\begin{Code}[show-output]
+% \UseTblrLibrary{tikz}  % in the preamble
+
+\highLight{\begin{tblrtikzbelow}}
+	\path[fill=blue!15,draw=blue!80, ultra thick, rounded corners]
+	(table.north west) rectangle (table.south east);
+\highLight{\end{tblrtikzbelow}}
+
+\highLight{\begin{tblrtikzabove}}
+	\draw[red!70, thick]
+		(2-2.north west) -- (2-3.south east)
+		(2-2.south west) -- (2-3.north east);
+	\draw[color=green,thick]
+		(h1-|v1) -- (h1-|v2) -- (h2-|v2) -- (h2-|v3) -- (h3-|v3) -- (h3-|v4)
+		-- (h4-|v4) -- (h4-|v5) -- (h2-|v5) -- (h2-|v6) -- (h1-|v6);
+\highLight{\end{tblrtikzabove}}
+
+\begin{tblr}{
+	colspec={ccccc},
+	hlines={4pt},
+	vlines={3pt},
+	hline{1,Z} = {0pt},
+	vline{1,Z} = {0pt},
+}
+	1-1 & 1-2 & 1-3 & 1-4 & 1-5 \\
+	2-1 & some text & other text & 2-4 & 2-5 \\
+	3-1 & 3-2 & 3-3 & 3-4 & 3-5
+\end{tblr}	
+\end{Code}
+
+The tikz library allows to draw on (or under) the table, with any valid tikz instruction, once the size of each cell has been computed\footnote{Note that you can insert tikz images in a table cell. But these images will increase the cell's width.}. The environment \snippet{tblrtikzabove} allows to draw on top of the table, and \snippet{tblrtikzbelow} under the table. These environments must be defined before the table they relate to.
+
+Each cell is given a named tikz node: the cell at row i and column j is named \snippet{(i-j)}. Similarly, each border intersection has a name: the intersection of hline i with vline j is named \snippet{(hi-|vj)}. 
+
+\subsection{Diagonal separations with diagbox}
+
+\begin{Code}[show-output]
+% \UseTblrLibrary{diagbox}  % in the preamble
+
+\begin{tblr}{
+	colspec={c|ccc},
+}
+	\highLight{\diagbox{Day}{Roommate}} & Martin & Emma & Julie\\ \hline
+	Monday & Dishes & & Cooking\\
+	Tuesday & Cooking & Dishes & \\
+	Wednesday & & Cooking & Dishes \\
+	Thursday & Dishes & & Cooking \\ 
+	Friday & Cooking & Dishes & \\
+	Saturday & & Cooking & Dishes \\
+	Sunday & & & \\
+\end{tblr}
+\end{Code}
+
+\snippet{\textbackslash diagboxthree\{\}\{\}\{\}} is also available.
+
+%\subsection{Automatic in-cell computing with functional}

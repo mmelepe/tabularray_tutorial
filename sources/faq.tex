@@ -1,19 +1,19 @@
 \chapter{FAQ}\label{app:faq}
 
 \section{Why is my code slow to compile?}
-tabularray is not fast, around 10 times slower than native Latex tables, and even 30 times slower for \snippet{longtblr}! However, the latest versions have considerably increase tabularray performances.
+tabularray is not fast, around 10 times slower than native Latex tables, and even 30 times slower for \snippet{longtblr}! However, the latest versions have considerably improved tabularray's performance.
 
 Make sure that your tabularray version is up to date (at least version 2025A for the performance boosts). You can refer to \Cref{app:version} to see how to check your version.
 
 \section{I cannot use Tikz in my tables, what is happening?}
 
-Tikz support in tabularray only comes from versions 2025A and more recent. If you are using TeXLive, this means that you must use a TexLive distribution at least as recent as 2025.
+Tikz support in tabularray only comes from versions 2025A and later. If you are using TeXLive, this means that you must use a TexLive distribution from 2025 or later.
 
 Check that your tabularray version is up to date (at least version 2025A). You can refer to \Cref{app:version} to see how to check your version.
 
 \section{Why is the styling for my row/cell/column not correctly displayed?}
 
-Remember that for tabularray, style priority is given to the last instruction on a specific property. Hence, the next two tables have different render:
+Remember that for tabularray, style priority is given to the last instruction on a specific property. Hence, the next two tables render differently:
 
 \begin{Code}[show-output]
 \begin{tblr}{
@@ -43,7 +43,7 @@ Remember that for tabularray, style priority is given to the last instruction on
 
 \section{I got the error message \texttt{Erreur: Not allowed in LR mode}, what is that?}}
 
-This error happens sometimes, when you have line breaks in a cell that tabularray has trouble taking into account. Notably, this error pops up when you want to add a list in a cell. For instance, the following code will generate an error:
+This error sometimes occurs when you have line breaks in a cell that tabularray has trouble taking into account. Notably, this error pops up when you want to add a list in a cell. For instance, the following code will generate an error:
 
 \begin{Code}
 \documentclass{article}
@@ -84,7 +84,7 @@ In order to fix the bug, you will have to add the \snippet{varwidth} tabularray 
 
 \section{I got the error message \texttt{Erreur: runaway argument? } on an empty line, what does that mean?}
 
-tabullarray does not support empty lines in its header. If you want to visually separate some options, you need to add a comment \snippet{\%} at the beginning of the empty line. 
+tabularray does not support empty lines in its header. If you want to visually separate some options, you need to add a comment \snippet{\%} at the beginning of the empty line. 
 
 The following example will not compile: 
 

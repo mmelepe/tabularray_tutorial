@@ -1,6 +1,6 @@
 \chapter{Advanced colspec}\label{app:colspec}
 
-In this tutorial, we saw that \snippet{colspec} could contain information on the colunms and vertical borders of your table. But, just like with native Latex tables, there is more to it. In most cases however, tabularray has a header option that is preferrable.
+In this tutorial, we saw that \snippet{colspec} could contain information on the columns and vertical borders of your table. But, just like with native Latex tables, there is more to it. In most cases however, tabularray has a header option that is preferable.
 
 \section{Column separation}
 
@@ -42,7 +42,7 @@ It is often better to rather use the \snippet{colsep} (margin on both sides), \s
 
 \section{Text at the beginning and the end of a cell}
 
-Let us mention the operators \snippet{>\{\}} and \snippet{<\{\}}, who respectively add some text at the beginning and at the end of each cell of the column. Rather than long explanations, here is an example: 
+Let us mention the operators \snippet{>\{\}} and \snippet{<\{\}}, which respectively add some text at the beginning and at the end of each cell of the column. Rather than long explanations, here is an example: 
 
 \begin{Code}[show-output]
 \begin{tblr}{\highLight{>{Candidate }}ccc\highLight{<{s}}}
@@ -53,12 +53,12 @@ Let us mention the operators \snippet{>\{\}} and \snippet{<\{\}}, who respective
 \end{tblr}
 \end{Code}
 
-Here again, tabularray has the options \snippet{preto} and \snippet{appto} that are preferrable and do same thing in most cases. If you want to add commands with the operators  \snippet{>} and \snippet{<}, you will maybe have to use the option \snippet{cmd} instead. I will let you refer to the documentation for this one.
+Here again, tabularray has the options \snippet{preto} and \snippet{appto} that are preferable and do the same thing in most cases. If you want to add commands with the operators  \snippet{>} and \snippet{<}, you will maybe have to use the option \snippet{cmd} instead. I will let you refer to the documentation for this one.
 
 \section{Several times the same column}
 
 When our table has numerous columns, writing dozens of times the same instruction in the colspec can quickly become repetitive. Luckily, you can replace this by, for instance, \snippet{*\{3\}\{c|Q[l,2cm]\}}, which is the same thing as \snippet{c|Q[l,2cm]c|Q[l,2cm]c|Q[l,2cm]}.
-Here is an example, with as a bonus a use of the option \snippet{cmd} that we talked about just above.
+Here is an example, with a use of the option \snippet{cmd} that we talked about just above as an added bonus.
 
 \begin{Code}
 \documentclass{standalone}
@@ -104,7 +104,7 @@ Will give:
 
 \section{No colspec}
 
-I have to confess something: the colspec option is not mandatory. As a matter of fact, tabularray computes the table structure from the ampersands \snippet{\&} in each row. Moreover, in case of conflict between the colspect and the table body, the table body wins (remember the priority rules!).
+I have to confess something: the colspec option is not mandatory. As a matter of fact, tabularray computes the table structure from the ampersands \snippet{\&} in each row. Moreover, in case of conflict between the colspec and the table body, the table body wins (remember the priority rules!).
 
 \begin{Code}
 \begin{tblr}\highLight{{}}  % also works

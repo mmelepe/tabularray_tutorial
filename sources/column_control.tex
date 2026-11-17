@@ -1,6 +1,6 @@
 \chapter{Control the cells and columns}\label{sec:control}
 
-We saw that there were 4 types of columns. Actually, I lied: there is only one type of column! It's the column \snippet{Q}. This column can receive a ton of optional parameters (between square brackets \snippet{[]}). For instance:
+We saw that there were 4 different columns. Actually, I lied: there is only one column! It's the column \snippet{Q}. This column can receive a ton of optional parameters (between square brackets \snippet{[]}). For instance:
 
 \begin{itemize}
 	\item \snippet{Q[l]} is a left-aligned column
@@ -12,10 +12,10 @@ We saw that there were 4 types of columns. Actually, I lied: there is only one t
 By default, \snippet{Q} (without any option) is a justified column, and thus is equivalent to \snippet{Q[j]}.
 
 \begin{infobox}{}
-	The columns \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} that we saw in the previous chapter are aliases of \snippet{Q[l]}, \snippet{Q[c]}, \snippet{Q[r]}, \snippet{Q[j]}, respectively.
+	The columns \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} that we saw in the previous chapter are aliases for \snippet{Q[l]}, \snippet{Q[c]}, \snippet{Q[r]}, \snippet{Q[j]}, respectively.
 \end{infobox}
 
-You'll ask me what's the point? The idea of keeping the \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} is retro-compatibility with native Latex table (it's also faster to type and easier for a human to parse). The idea of the \snippet{Q} syntax is that we can also pass it numerous other options, that we will see just now.
+You'll ask me what the point is. The idea of keeping the \snippet{l}, \snippet{c}, \snippet{r}, \snippet{j} is backward compatibility with native Latex table (it's also faster to type and easier for a human to parse). The idea of the \snippet{Q} syntax is that we can also pass numerous other options to it, that we will see right now.
 
 \section{Control column width}
 
@@ -23,13 +23,13 @@ First of all, if you experimented a bit on your own, you might have noticed that
 
 \begin{Code}[show-output]
 \begin{tblr}{|l|l|l|}
-	Pseudo & Comment & Date \\ \hline
+	Pseudo & Comment  & Date \\ \hline
 	melepe & Amazing! & Yesterday\\
 \end{tblr}
 \end{Code}
 \begin{Code}[show-output]
 \begin{tblr}{|l|l|l|}
-	Pseudo & Comment & Date \\ \hline
+	Pseudo & Comment  & Date \\ \hline
 	melepe & Amazing! & Yesterday \\
 	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
 \end{tblr}
@@ -37,26 +37,26 @@ First of all, if you experimented a bit on your own, you might have noticed that
 
 On one hand, it's practical when your text has a reasonable length, because you don't have to compute the column width on your own. On the other hand, you cannot have long text in such tables. 
 
-Instead, tabularray offers the possibility to specify a column width: in centimeters (\snippet{cm}), points (\snippet{pt}), or any other Latex measuring unit (see \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}). You don't know which one to chose? Keep it simple and use centimeters.
+Instead, tabularray offers the possibility to specify a column width: in centimeters (\snippet{cm}), points (\snippet{pt}), or any other Latex measuring unit (see \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}). You don't know which one to choose? Keep it simple and use centimeters.
 
 To define a column width, simply write it in the column's options. For instance, \snippet{Q[4cm]} defines a 4cm wide column. We can of course mix horizontal alignment options too, for instance \snippet{Q[l, 4cm]}. 
 Let's see it in action:
 
 \begin{Code}[show-output]
 \begin{tblr}{|l|Q[l]|l|}  % Same table as previously, but we use a Q[l]
-	Pseudo & Comment & Date \\	\hline
+	Pseudo & Comment  & Date \\	\hline
 	melepe & Amazing! & Yesterday\\
 \end{tblr}
 \end{Code}
 \begin{Code}[show-output]
 \begin{tblr}{|l|\highLight{Q[l,4cm]}|l|}  % Column will be 4cm even if the text is too short
-	Pseudo & Comment & Date \\ \hline
+	Pseudo & Comment  & Date \\ \hline
 	melepe & Amazing! & Yesterday\\
 \end{tblr}
 \end{Code}
 \begin{Code}[show-output]
 \begin{tblr}{|l|\highLight{Q[l,4cm]}|l|}  % Column will be 4cm even if the text is too long
-	Pseudo & Comment & Date \\ \hline
+	Pseudo & Comment  & Date \\ \hline
 	melepe & Amazing! & Yesterday \\
 	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
 \end{tblr}
@@ -66,7 +66,7 @@ Now you know in which context the \snippet{j} column can be relevant.
 
 \section{Control column vertical alignment}
 
-Now that we have multiline cells, we must take into account vertical alignment. In the examples above, we see that the text is aligned at the top of the cells. 
+Now that we have multiline cells, we must take vertical alignment into account. In the examples above, we see that the text is aligned at the top of the cells. 
 
 Let's start with two placement options: 
 
@@ -75,12 +75,12 @@ Let's start with two placement options:
 	\item At the end of the cell, with the option \snippet{f} (for \textbf{f}oot)
 \end{itemize}
 
-This option must be passed as an argument to the column \snippet{Q}. It can of course be cumulated with the options we saw before.
+This option must be passed as an argument to the column \snippet{Q}. It can of course be combined with the options we saw before.
 
 \begin{Code}[show-output]
 \begin{tblr}{|\highLight{Q[f,l]}|Q[4cm]|l|} 
 	% No horizontal alignment given for the second column so the default option (j) applies.
-	Pseudo & Comment & Date \\
+	Pseudo & Comment  & Date \\
 	\hline
 	melepe & Amazing! & Yesterday \\
 	melepe & Ah also I wanted to give a huge shoutout to my friends, to my family and my team who have always been there for me & Today \\
@@ -126,7 +126,7 @@ Will render like so (I added the baseline in red):
 It's so simple, and yet, compared to the hell you need to go through to get the same result with native Latex tables, it's a revolution!
 
 \begin{warningbox}{Baseline alignment is not text alignment}
-	Be careful, as we said the vertical alignment will align the \emph{baseline}, not the text itself. This will give counter-intuitive results when several cells are multiline.
+	Be careful, as we said above, the vertical alignment will align the \emph{baseline}, not the text itself. This will give counter-intuitive results when several cells are multiline.
 	
 \begin{Code}
 \begin{tblr}{|Q[2cm,b]|Q[2cm,t]|Q[2cm,m]|}
@@ -163,7 +163,7 @@ Combining every possible option into one table, we get the following result.
 Note that options \snippet{h} and \snippet{b} are not equivalent, and neither are \snippet{f} and \snippet{t}.
 
 \section{Multiline cells}
-Sometimes, it is useful to write several lines in a cell, and deciding yourself where you want the line break. For this, there is a very simple solution: put the cell text in-between curly braces \snippet{\{\}}, and now you are able to use the Latex command for linebreak: \snippet{\textbackslash\textbackslash}. 
+Sometimes, it is useful to write several lines in a cell, and deciding yourself where you want the line break. For this, there is a very simple solution: put the cell text between curly braces \snippet{\{\}}, and now you are able to use the Latex command for linebreak: \snippet{\textbackslash\textbackslash}. 
 
 \begin{Code}[show-output]
 	\begin{tblr}{lll}
@@ -187,7 +187,7 @@ Of course, multiline cells can be horizontally or vertically aligned. In the fol
 
 \section{Columns spanning all the available space}
 
-tabularray also has another column, the column \snippet{X}\footnote{This column is also an alias of the column \snippet{Q}, more specifically is an alias of \snippet{Q[co=1]}. But it's often easier to use the \snippet{X} notation, in resemblance to tabularx package. The \snippet{X} column notation also accepts optional arguments, e.g. \snippet{X[l,m]}.}. An \snippet{X} column will calculate the remaining free space available across the page width, and automatically fill this space. If there are several \snippet{X} columns in the table, the space is equally distributed over these columns, meaning they will all have the same width.
+tabularray also has another column, the column \snippet{X}\footnote{This column is also an alias of the column \snippet{Q}, more specifically is an alias of \snippet{Q[co=1]}. But it's often easier to use the \snippet{X} notation, in resemblance to tabularx package. The \snippet{X} column notation also accepts optional arguments, e.g. \snippet{X[l,m]}.}. An \snippet{X} column will expand to fill all the remaining available space. If there are several \snippet{X} columns in the table, the space is equally distributed over these columns, meaning they will all have the same width.
 
 \begin{Code}[show-output]
 % Reference table
@@ -259,7 +259,7 @@ Similarly, too many blank lines in the body of the table might cause unexpected 
 tabularray does not guarantee correct results if there are two or more consecutive blank lines. However, lines with only a comment do not count as blank lines.
 \end{errorbox}
 
-For a finer setting of the column size, it is possible to give an argument to the \snippet{X} column. This argument, a number, is a priority coefficient, for when there are several \snippet{X} columns in the table. Remember that, by default, the remaining space is distributed equally. Thanks to these coefficents, it is possible to adjust this distribution.
+For a finer control of the column width, it is possible to give an argument to the \snippet{X} column. This argument, a number, is a priority coefficient, for when there are several \snippet{X} columns in the table. Remember that, by default, the remaining space is distributed equally. Thanks to these coefficients, it is possible to adjust this distribution.
 
 For instance, \snippet{X[2]} is a column that has a coefficient of 2, \snippet{X[3]} has coefficient 3, and so on. By default, \snippet{X} is equivalent to \snippet{X[1]}.
 
@@ -275,7 +275,7 @@ For instance, \snippet{X[2]} is a column that has a coefficient of 2, \snippet{X
 Another neat feature of the \snippet{X} columns is the fact that they accept negative coefficients. A negative value means that the \snippet{X} column will expand \emph{at most} to the given coefficient, if the text in the column requires that much space, and if there are other \snippet{X} cells that will use the remaining space.
 
 \begin{Code}[show-output]
-\begin{tblr}{|X|X[-2.5]|} \hline 
+\begin{tblr}{|X|X\highLight{[-2.5]}|} \hline 
 	coeff +1 & coeff -2.5 \\ \hline
 \end{tblr}
 \end{Code}
@@ -285,7 +285,7 @@ Finally, note that \snippet{X} can receive other options, such as horizontal ali
 
 
 \section{Merged cells}
-Another highly appreciated functionality of tabularray if the ability to merge cells with ease. Let's look at the following table:
+Another highly appreciated functionality of tabularray is the ability to merge cells with ease. Let's look at the following table:
 
 \begin{Code}[show-output]
 \begin{tblr}{l|l|l}
@@ -310,7 +310,7 @@ We can use the command \snippet{\textbackslash SetCell} to do so. Let's first sh
 \end{tblr}
 \end{Code}
 
-Note that the horizontal line automatically disappeared between the merged cells. Also note that the cell that is ``overwritten'' by the merged cell must still be indicated with a \snippet{\&}, even though it will not be displayed. Its content is irrelevant, as it will be overwritten by the contents of the cell containing the \snippet{\textbackslash SetCell}\footnote{This can lead to frustrating debugging sessions: the text you are writing is not appearing in the table, and you finally realize that you are writing text in a merged cell that is overwritten and therefore the text will never be displayed \emoji{poop}.}.
+Note that the horizontal line automatically disappeared between the merged cells. Also note that the cell that is ``overwritten'' by the merged cell must still be indicated with a \snippet{\&}, even though it will not be displayed. Its content is irrelevant, as the cell will be overwritten by the content of the cell with the \snippet{\textbackslash SetCell}\footnote{This can lead to frustrating debugging sessions: the text you are writing is not appearing in the table, and you finally realize that you are writing text in a merged cell that is overwritten and therefore the text will never be displayed \emoji{poop}.}.
 
 Let us now explain the \snippet{\textbackslash SetCell} command. It takes an optional argument between square brackets \snippet{[]} and a mandatory one between curly braces \snippet{\{\}}:
 

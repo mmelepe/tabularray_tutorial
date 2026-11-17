@@ -3,7 +3,7 @@
 \subsection{Drawing in your table with Tikz}
 
 \begin{warningbox}{Minimal tabularray version}
-	The tikz library is only available from tabularray version 2025A or more recent.
+	The tikz library is only available from tabularray version 2025A or later.
 \end{warningbox}
 
 \begin{Code}[show-output]
@@ -36,9 +36,9 @@
 \end{tblr}	
 \end{Code}
 
-The tikz library allows to draw on (or under) the table, with any valid tikz instruction, once the size of each cell has been computed\footnote{Note that you can insert tikz images in a table cell. But these images will increase the cell's width.}. The environment \snippet{tblrtikzabove} allows to draw on top of the table, and \snippet{tblrtikzbelow} under the table. These environments must be defined before the table they relate to.
+The tikz library allows you to draw on (or underneath) the table, with any valid tikz instruction, once the size of each cell has been calculated\footnote{Note that you can insert tikz images in a table cell. But these images will increase the cell's width.}. The environment \snippet{tblrtikzabove} allows to draw on top of the table, and \snippet{tblrtikzbelow} under the table. These environments must be placed before the table they relate to.
 
-Each cell is given a named tikz node: the cell at row i and column j is named \snippet{(i-j)}. Similarly, each border intersection has a name: the intersection of hline i with vline j is named \snippet{(hi-|vj)}. 
+Each cell is assigned a named tikz node: the cell at row i and column j is named \snippet{(i-j)}. Similarly, each border intersection has a name: the intersection of hline i with vline j is named \snippet{(hi-|vj)}. 
 
 \subsection{Diagonal separations with diagbox}
 
@@ -49,13 +49,13 @@ Each cell is given a named tikz node: the cell at row i and column j is named \s
 	colspec={c|ccc},
 }
 	\highLight{\diagbox{Day}{Roommate}} & Martin & Emma & Julie\\ \hline
-	Monday & Dishes & & Cooking\\
-	Tuesday & Cooking & Dishes & \\
-	Wednesday & & Cooking & Dishes \\
-	Thursday & Dishes & & Cooking \\ 
-	Friday & Cooking & Dishes & \\
-	Saturday & & Cooking & Dishes \\
-	Sunday & & & \\
+	Monday    & Dishes  &         & Cooking\\
+	Tuesday   & Cooking & Dishes  & \\
+	Wednesday &         & Cooking & Dishes \\
+	Thursday  & Dishes  &         & Cooking \\ 
+	Friday    & Cooking & Dishes  & \\
+	Saturday  &         & Cooking & Dishes \\
+	Sunday    &         &         & \\
 \end{tblr}
 \end{Code}
 

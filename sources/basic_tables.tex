@@ -26,15 +26,15 @@ The example below shows a minimal table example, with 2 rows and 3 columns, and 
 \begin{warningbox}{Compilation error?}
 If the above example does not compile on your machine, it is probable that your Latex distribution is not up to date or that tabularray is not installed. Please refer to the FAQ in \Cref{app:version} to update your distribution.
 
-Moreover, many examples and functionalities in this tutorial rely on the 2025A version. All examples might not work with your current tabularray version, please refer to \Cref{app:version} in case of doubt.
+Moreover, many examples and functionalities in this tutorial rely on the 2025A version. Not all examples might work with your current tabularray version, please refer to \Cref{app:version} in case of doubt.
 \end{warningbox}
 
 For the moment, our table is ugly, but that's a problem for later \emoji{smiley}. Let's analyze our code piece by piece:
 
 \begin{itemize}
-    \item \snippet{\textbackslash begin\{tblr\}} and \snippet{\textbackslash end\{tblr\}} indicate the beggining and the end of the table, respectively.
+    \item \snippet{\textbackslash begin\{tblr\}} and \snippet{\textbackslash end\{tblr\}} mark the beginning and the end of the table, respectively.
     \item Columns are specified directly after the \snippet{\textbackslash begin\{tblr\}}, between two curly braces \snippet{\{\}}. Here, we want three columns with horizontally centered text (type \snippet{c}, we will see other types later on), which gives us \snippet{\{ccc\}}.
-    \item Table data itself. You just have to write the contents of our table, using the following two formatting tools:
+    \item The table data itself. You just have to write the contents of our table, using the following two formatting tools:
     \begin{itemize}
         \item \snippet{\&} for separating successive cells in the same row;
         \item \snippet{\textbackslash\textbackslash} to indicate the end of the row.
@@ -56,7 +56,7 @@ That is very much feasible, you just have to escape the characters, as usual in 
 \end{tblr}
 \end{Code}
 
-Note that in this code snippet, the ampersands were aligned so that the table structure was directly visible in the Latex source code. This is not mandatory and changes nothing to the final rendered table (surrounding spaces are ignored by Latex as a general rule), but it's more practical when you are editing your table. It is a good habit to catch!
+Note that in this code snippet, the ampersands were aligned so that the table structure was directly visible in the Latex source code. This is not mandatory and changes nothing to the final rendered table (surrounding spaces are ignored by Latex as a general rule), but it's more practical when you are editing your table. It is a good habit to build!
 
 You obviously can create a table with any number of rows and columns. The only important thing is to specify the correct number of columns just after \snippet{\textbackslash begin\{tblr\}} and to use \snippet{\textbackslash\textbackslash} to indicate the next row.
 
@@ -64,7 +64,7 @@ For instance, the code below will give the expected result (but definitely not a
 
 \begin{Code}[show-output]
 \begin{tblr}{cccccccc}  % 8 centered columns
-	       & Monday   & Tuesday  & Wednesday & Thursaday & Friday   & Saturday & Sunday \\
+	       & Monday   & Tuesday  & Wednesday & Thursday  & Friday   & Saturday & Sunday \\
 	Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
 	Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers \\
 \end{tblr}
@@ -95,7 +95,7 @@ Until now, we always used horizontally centered columns. But there are other col
 \end{Code}
 
 \section{Adding horizontal and vertical borders}
-Until now, our tables are hopelessly ugly \emoji{frowning-face}, notably becayse we are not yet using any borders. 
+Until now, our tables are hopelessly ugly \emoji{frowning-face}, notably because we are not yet using any borders. 
 Fortunately, vertical and horizontal borders are very easy to add to your table! 
 
 \begin{itemize}
@@ -115,7 +115,7 @@ Fortunately, vertical and horizontal borders are very easy to add to your table!
 \end{tblr}
 \end{Code}
 
-Of course, you can add borders wherever you want, and as many as you want. You can even use double, triple or even more borders, even though it becomes quickly unreadable.
+Of course, you can add borders wherever you want, and as many as you want. You can even use double, triple or even more borders, although it quickly becomes unreadable.
 
 %
 %\begin{Code}[show-output]
@@ -159,16 +159,16 @@ and
 \end{standalonebox}
 \end{center}
 
-It is up to you to decide how many borders are too many. General recommandations are: 
+It is up to you to decide how many borders are too many. General recommendations are: 
 
 \begin{itemize}
 \item Do not use double borders
-\item Avoid vertical borders as much as possible\footnote{There are people who find vertical borders unprofessional. I would not go this far, but I do agree that most of vertical borders are useless anyways.}
+\item Avoid vertical borders as much as possible\footnote{There are people who find vertical borders unprofessional. I would not go this far, but I do agree that most vertical borders are useless anyway.}
 \item Limit the number of borders, usually three horizontal lines (before the first row, after the first row, and after the last row) are enough
 \item Left alignment is often a good idea.
 \end{itemize}
 
-More information in the folllowing guide: \url{https://people.inf.ethz.ch/markusp/teaching/guides/guide-tables.pdf}. In this tutorial, we will use a lot of vertical borders, but mostly because they are useful to show where a cell ends. In general, it is better to stick with the rule of no vertical border.
+More information in the following guide: \url{https://people.inf.ethz.ch/markusp/teaching/guides/guide-tables.pdf}. In this tutorial, we will use a lot of vertical borders, but mostly because they are useful to show where a cell ends. In general, it is better to stick to the rule of no vertical border.
 \end{warningbox}
 
 \section{Compatibility with native Latex tables}
@@ -176,7 +176,7 @@ In this tutorial, we will only deal with tabularray tables. But many people stil
 
 Now, the same code will produce a more pleasant table in tabularray, and all the functionalities we will see afterwards are much easier to invoke in tabularray than in native tables and the army of packages we would need otherwise.
 
-Let us have a comparison between a native and a tabularray table:
+Let us compare a native and a tabularray table:
 
 \begin{Code}[show-output]
 \begin{tabular}{ccc}
@@ -202,7 +202,7 @@ Let us have a comparison between a native and a tabularray table:
 \end{tblr}
 \end{Code}
 
-You’ll appreciate tabularray straight away \emoji{grinning}. In the rest of this tutorial, we will look at commands that are specific to tabularray and which are no longer compatible with Latex’s native tables.
+You’ll appreciate tabularray straight away \emoji{grinning}. In the rest of this tutorial, we will look at commands that are specific to tabularray and thus not compatible with Latex’s native tables.
 
 \begin{infobox}{TL;DR}
 \begin{itemize}

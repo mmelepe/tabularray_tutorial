@@ -1,9 +1,9 @@
 \chapter{Manage separations and spacing}\label{sec:separations}
 
-The previous chapter covered cell and column management. We will now deal with how our cells and columns are separated. This chapter will be brief, enjoy it while it lasts \emoji{grinning}.
+The previous chapter covered cell and column management. We will now look at how cells and columns are separated. This chapter will be brief, enjoy it while it lasts \emoji{grinning}.
 
 \section{Add all separation lines}
-If you want to display all horizontal and/or vertical lines, there is a command for that. Since the option is passed to tabularray's header, do not forget to put the colspec inside the keyword argument \snippet{colspec=\{...\}}.
+If you want to display all horizontal and/or vertical lines, there is an option for that. Since the option is passed to tabularray's header, do not forget to put the colspec inside the keyword argument \snippet{colspec=\{...\}}.
 
 \begin{Code}[show-output]
 \begin{tblr}{
@@ -70,14 +70,14 @@ Let's have another look to merged cells. If you played with them a bit, you migh
 \end{tblr}
 \end{Code}
 
-We can see that only the last column is extended to make the merged cell fit. Similarly, only the last row has been extended to make the first cell fit. 
+We can see that only the last column is expanded to make the merged cell fit. Similarly, only the last row has been extended to make the first cell fit. 
 
-There are several ways to fix the issue. The first one is to set the columns (and rows) width, as merged cells respect their parent's column/row width, but this is not always interesting or easy. The second solution is to use another computation mode for cell expansion, with the header attribute \snippet{hspan} (and \snippet{vspan}).
+There are several ways to fix the issue. The first one is to set the columns (and rows) width, as merged cells respect their parent's column/row width, but this is not always practical or easy. The second solution is to use another computation mode for cell expansion, with the header attribute \snippet{hspan} (and \snippet{vspan}).
 
 \begin{itemize}
 	\item \snippet{hspan=default} will extend the last column as much as possible, it is the default behaviour we saw.
-	\item \snippet{hspan=even} will evenly distribute the extra space between the margins of the columns in which the cells are merged
-	\item \snippet{hspace=minimal} will force the merged cell to not extend, and thus insert line breaks in the merged cell if necessary
+	\item \snippet{hspan=even} will evenly distribute the extra space among the margins of the columns in which the cells are merged
+	\item \snippet{hspan=minimal} will force the merged cell to not extend, and thus insert line breaks in the merged cell if necessary
 \end{itemize}
 
 Similarly, \snippet{vspan} can be either \snippet{default} or \snippet{even} (but not \snippet{minimal}!).

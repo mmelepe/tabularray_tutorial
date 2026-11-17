@@ -12,7 +12,7 @@ In order to use tikz\footnote{tikz is a very powerful drawing package for Latex.
 \begin{Code}
 \documentclass{article}
 \usepackage{tabularray}
-\UseTblrLibrary{tikz}  % \Use with uppercase U!
+\highLight{\UseTblrLibrary{tikz}}  % \Use with uppercase U!
 
 \begin{document}
 % Our tables here
@@ -43,7 +43,7 @@ You are now free to use any tikz command and make your table prettier. This tuto
 The first example is a slight modification of an example from the official tabularray documentation. See how the red lines are drawn above the text, while blue background is drawn below.
 
 \begin{Code}[show-output]
-% \usepackage{ninecolors} and \UseTblrLibrary{tikz} in the preamble
+% \usepackage{xcolors} and \UseTblrLibrary{tikz} in the preamble
 \begin{tblrtikzbelow}
 	\path[fill=blue!15,draw=blue!80, ultra thick, rounded corners]
 	  (table.north west) rectangle (table.south east);
@@ -143,14 +143,14 @@ By adding \snippet{\textbackslash UseTblrLibrary\{diagbox\}} in the preamble, yo
 \begin{tblr}{
 	colspec={c|ccc},
 }
-	\diagbox{Day}{Roommate} & Martin & Emma & Julie\\ \hline
-	Monday & Dishes & & Cooking\\
-	Tuesday & Cooking & Dishes & \\
-	Wednesday & & Cooking & Dishes \\
-	Thursday & Dishes & & Cooking \\ 
-	Friday & Cooking & Dishes & \\
-	Saturday & & Cooking & Dishes \\
-	Sunday & & & \\
+	\highLight{\diagbox{Day}{Roommate}} & Martin  & Emma    & Julie\\ \hline
+	Monday                  & Dishes  &         & Cooking\\
+	Tuesday                 & Cooking & Dishes  & \\
+	Wednesday               &         & Cooking & Dishes \\
+	Thursday                & Dishes  &         & Cooking \\ 
+	Friday                  & Cooking & Dishes  & \\
+	Saturday                &         & Cooking & Dishes \\
+	Sunday                  &         &         & \\
 \end{tblr}
 \end{Code}
 

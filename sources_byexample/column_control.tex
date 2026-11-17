@@ -1,6 +1,6 @@
 \section{Column control}
 
-\subsection{Control column width and vertical alignment}
+\subsection{Column width and vertical alignment}
 
 \begin{Code}[show-output]
 \begin{tblr}{\highLight{|Q[l,2cm,b]|Q[r,2cm,t]|Q[2cm,m]|Q[2cm,m]|Q[2cm,h]|Q[2cm,f]|}}
@@ -10,12 +10,12 @@
 \end{tblr}
 \end{Code}
 
-Columns are technically all of \snippet{Q} type. A \snippet{Q} column can take optional arguments in any order, such as:
+Columns are technically all of \snippet{Q} type. A \snippet{Q} column accepts optional arguments in any order, such as:
 
 \begin{itemize}
 	\item The horizontal alignment\footnote{A \snippet{Q[l]} column is equivalent to a \snippet{l} column, and so on. However, an \snippet{l} column cannot receive additional arguments, whereas a \snippet{Q} column can: \snippet{Q[l,2cm,f]}.} (\snippet{l}, \snippet{c}, \snippet{r}, \snippet{j}). Default value is \snippet{j}.
-	\item The column width (in the example above, in \snippet{cm} but any unit of length, see e.g. \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}, is valid). By default, a column will extend as much as possible so that all cells text fit on one line, which might cause the table to overflow.
-	\item The vertical alignment. The possible values are: \snippet{h} (\textbf{h}ead, positions the text at the top of the cell), \snippet{f} (\textbf{f}oot, positions the text at the bottom of the cell), \snippet{t} (sets the baseline of the cell at the \textbf{t}op of the text block), \snippet{m} (sets the baseline at the \textbf{m}iddle of the text block), \snippet{b} (sets the baseline at the \textbf{b}ottom of the text block). Default value is \snippet{m}.
+	\item The column width (in the example above, in \snippet{cm} but any length unit, see e.g. \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}, is valid). By default, a column will extend as much as possible so that the text of all its cells fit on one line, which might cause the table to overflow.
+	\item The vertical alignment. The possible values are: \snippet{h} (\textbf{h}ead, positions the text at the top of the cell), \snippet{f} (\textbf{f}oot, positions the text at the bottom of the cell), \snippet{t} (places the baseline of the cell at the \textbf{t}op of the text block), \snippet{m} (places the baseline at the \textbf{m}iddle of the text block), \snippet{b} (places the baseline at the \textbf{b}ottom of the text block). Default value is \snippet{m}.
 \end{itemize}
 
 Other options are available, and we will see some of these below.
@@ -34,7 +34,7 @@ Note that \snippet{h} and \snippet{b} options are not equivalent, neither are \s
 \end{tblr}
 \end{Code}
 
-Multiline cells must be delimited by \{\}. They can be vertically centered, by selecting the desired alignment in the colspec.
+Multiline cells are enclosed by \{\}, in which line breaks are indicated by \snippet{\textbackslash\textbackslash}. They can be vertically centered, by selecting the desired alignment in the colspec.
 
 
 \subsection{Variable width column}

@@ -1,11 +1,11 @@
 \chapter{Multipage tables}\label{sec:multipage}
 
-Let us now focus to very long tables. All the tables we saw until now could easily fit in a single page, even though that sometimes meant that Latex would move the table to the next page. 
+Let us now focus on very long tables. All the tables we saw until now could easily fit in a single page, even though that sometimes meant that Latex would move the table to the next page. 
 
-But sometimes, our tables are really too long even for a full page. It is then necessary to split your table on several pages, and tabularray has a command just for that, namely the environment \snippet{longtblr}.
+But sometimes, our tables are really too long even for a full page. It is then necessary to split your table across several pages, and tabularray has a command just for that, namely the environment \snippet{longtblr}.
 
 \begin{Code}
-\begin{longtblr}{
+\highLight{\begin{longtblr}}{
 	colspec={ll},
 	row{1} = {font=\bfseries},
 }
@@ -20,7 +20,7 @@ But sometimes, our tables are really too long even for a full page. It is then n
 	Yemen & Sanaa \\
 	Zambia & Lusaka \\
 	Zimbabwe & Harare
-\end{longtblr}
+\highLight{\end{longtblr}}
 \end{Code}
 
 I include screenshots of the beginning and end of the first page, of any page in the middle, and the end of the last page:
@@ -40,7 +40,7 @@ I include screenshots of the beginning and end of the first page, of any page in
 
 You can see that the table is automatically horizontally centered, with an empty caption. Some text is also automatically added at the bottom of the page (\textit{Continued on next page}), and the beginning of the following pages (\textit{Continued}).
 
-All these details can be modified. You can also decide of how many rows will be systematically displayed at the top or the bottom of every page. Of how to display the caption. Of many other things still, but these are the main ones. These choices must be declared as an option to \snippet{longtblr}. Other choices must be defined in what tabularray calls templates. It is not very practical but it is how it is.
+All these details can be modified. You can also decide how many rows will be systematically displayed at the top or the bottom of every page. How to display the caption. Many other things still, but these are the main ones. These choices must be declared as an option to \snippet{longtblr}. Other choices must be defined in what tabularray calls templates. It is not very practical but it is how it is.
 
 \begin{Code}
 
@@ -84,7 +84,7 @@ All these details can be modified. You can also decide of how many rows will be 
 \end{center}
 
 \begin{warningbox}{longtblr and compilation time}
-	\snippet{longtblr} are quite slow to compile. If your document takes time to compile, look if you can use an alternative such as \snippet{longtable}. Do not use \snippet{longtblr} instead of \snippet{tblr} if your table fits in one page!
+	\snippet{longtblr} are quite slow to compile. If your document takes time to compile, look whether you can use an alternative such as \snippet{longtable}. Do not use \snippet{longtblr} instead of \snippet{tblr} if your table fits in one page!
 \end{warningbox}
 
 One last thing: as we saw, long tables are, by default, horizontally centered. If for any reason you would like to change that, you can use the exterior attribute \snippet{halign}, which can be equal to \snippet{l}, \snippet{c}, \snippet{r}. This is not mentioned anywhere in tabularray documentation but it's always good to know \emoji{slightly-smiling-face}.

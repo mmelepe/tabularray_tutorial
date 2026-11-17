@@ -3,13 +3,13 @@
 We now arrive to a big chunk of this tutorial: styling tables. tabularray has a very powerful styling mechanism, that allows to easily create complex designs.
 
 \section{A bit of colour and formatting!}
-Colours in a table can be visually very efficient for carrying information, provided they are used sparingly. In any case, they are very to integrate within tabularray. 
-Before anything, it is necessary to load the package \snippet{xcolor} in the preamble (this won't be useful anymore with the version 2026A)\footnote{xcolors' default colors are very saturated: this is {\sethlcolor{red}\hl{red}}, this is {\sethlcolor{green}\hl{green}}. However, colors can be mixed together: \snippet{red!60} is 60\% red and 40\% white (the default mixing color), and {\sethlcolor{red!60}\hl{gives this color}}. Similarly, \snippet{green!70!black} will be 70\% green, 20\% black and {\sethlcolor{green!70!black}\hl{give this.}}}. %Personally, I also like to load the package \snippet{ninecolors}\footnote{\url{https://mirrors.ctan.org/macros/latex/contrib/ninecolors/ninecolors.pdf}}, which offers pretty colours.
+Colours in a table can be visually very efficient for carrying information, provided they are used sparingly. In any case, they are very easy to integrate within tabularray. 
+Before anything else, it is necessary to load the package \snippet{xcolor} in the preamble (this won't be useful anymore with the version 2026A)\footnote{xcolor's default colors are very saturated: this is {\sethlcolor{red}\hl{red}}, this is {\sethlcolor{green}\hl{green}}. However, colors can be mixed together: \snippet{red!60} is 60\% red and 40\% white (the default mixing color), and {\sethlcolor{red!60}\hl{gives this color}}. Similarly, \snippet{green!70!black} will be 70\% green, 20\% black and {\sethlcolor{green!70!black}\hl{gives this.}}}. %Personally, I also like to load the package \snippet{ninecolors}\footnote{\url{https://mirrors.ctan.org/macros/latex/contrib/ninecolors/ninecolors.pdf}}, which offers pretty colours.
 
 \begin{Code}
 \documentclass{article}
 \usepackage{tabularray}
-\usepackage{xcolor}
+\highLight{\usepackage{xcolor}}
 
 \begin{document}
 	% our tables here
@@ -21,9 +21,9 @@ We can now give cells a background color with our friend the command \snippet{\t
 \begin{Code}[show-output]
 \begin{tblr}{llllll}
 	Company  & Q1 & Q2 & Q3 & Q4 & Total\\ \hline
-	COSTO    & +150k & -300k & +210k & +150k & \SetCell{green!80!black} +210k \\
-	McDalle  & -120k & -200k & -200k & +250k & \SetCell{red!60} -270k \\
-	FireCar  & +150k & +300k & +450k & +150k & \SetCell{green!80!black} +1050k \\
+	COSTO    & +150k & -300k & +210k & +150k & \highLight{\SetCell{green!80!black}} +210k \\
+	McDalle  & -120k & -200k & -200k & +250k & \highLight{\SetCell{red!60}} -270k \\
+	FireCar  & +150k & +300k & +450k & +150k & \highLight{\SetCell{green!80!black}} +1050k \\
 \end{tblr}
 \end{Code}
 
@@ -51,11 +51,11 @@ You can also manage text color with the argument \snippet{fg}, or text size, its
 \section{Style in the header, style in the body}
 
 \subsection{Two possible methods}
-Until now, we saw that some options were to be defined in the table header (for instance, \snippet{hlines}), whereas some others had to be defined in the table body (for instance, \snippet{\textbackslash SetCell}). In reality, all the table properties can be defined both in the header and the body.
+Until now, we saw that some options had to be defined in the table header (for instance, \snippet{hlines}), whereas some others had to be defined in the table body (for instance, \snippet{\textbackslash SetCell}). In reality, all the table properties can be defined both in the header and the body.
 
 \subsection{Cell style in the header}
 
-We can also use header styling rather than scatter it in the table body. The result is exactly the same.
+We can also use header styling rather than scattering it in the table body. The result is exactly the same.
 
 % TODO for some reason the fg is not applied in this snippet???? Note sure if this is a piton bug or what.
 \begin{Code}
@@ -235,7 +235,7 @@ Similarly, the border width and color can be personalized, either in directly in
 \end{tblr}
 \end{Code}
 
-As you can see, it is not because you can add style to the borders that you should \emoji{grinning}.
+As you can see, just because you can add style to the borders doesn't mean that you should \emoji{grinning}.
 
 Note that the vertical border of index 1 is the one situated at the far left of the table, before the first column. Vertical border 2 is situated between column 1 and 2, and so on. The same applies for horizontal borders.
 
@@ -246,15 +246,15 @@ Instead of defining the style as, say, \snippet{hline\{3\} = \{2pt, dotted\}}, y
 
 \begin{Code}[show-output]
 \begin{tblr}{
-	hline{1} = {2-8}{},  % {} gives default style values, i.e. 1pt solid black on columns 2 to 8
-	hline{2-4} = {1-8}{},
-	vline{1} = {2-3}{red},  % Same for vertical border
-	vline{2-9} = {1-3}{red},
+	hline{1} = \highLight{{2-8}{}},  % {} gives default style values, i.e. 1pt solid black on columns 2 to 8
+	hline{2-4} = \highLight{{1-8}{}},
+	vline{1} = \highLight{{2-3}{red}},  % Same for vertical border
+	vline{2-9} = \highLight{{1-3}{red}},
 	colspec = {cccccccc},
 }
-	& Monday   & Tuesday  & Wednesday & Thursday & Friday   & Saturday & Sunday \\
-	Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
-	Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers \\
+	   & Monday   & Tuesday  & Wednesday & Thursday  & Friday   & Saturday & Sunday \\
+Lunch  & Potatoes & Potatoes & Potatoes  & Potatoes  & Potatoes & Potatoes & Potatoes too! \\ 
+Dinner & Rice     & Stir-fry & Soup      & Eat out   & Fish     & Pizza    & Leftovers \\
 \end{tblr}
 \end{Code}
 
@@ -274,7 +274,7 @@ With tabularray version 2025A and later, the row or column before last can be se
 	\highLight{row{odd[3]} = {gray!20},}
 	\highLight{row{Z} = {font=\bfseries},}
 }
-	Subject & {Reaction time (s)} & {Pain (EVA scale)} \\ \hline
+	Subject & {Reaction time (s)} & {Pain (VAS scale)} \\ \hline
 	Subjet 1 & 0:03 & 3 \\
 	Subjet 2 & 0:08 & 7 \\
 	Subjet 3 & 0:01 & 4 \\
@@ -288,13 +288,13 @@ With tabularray version 2025A and later, the row or column before last can be se
 	class and id are only available if your tabularray version is 2025A or above. If the code samples in this section do not compile for you, check that your version is up to date (there is a guide in \Cref{app:version}).
 \end{warningbox}
 
-Sometimes, the cells we want to select are not neatly aligned to be easily selected with our available selectors. Or we simply don't want to lose time counting and updating the column and row number of a \snippet{cell\{i\}\{j\}} argument every time we add a row to the table, and keep our style easy to read.
+Sometimes, the cells we want to select are not easily selected with the available selectors. Or we simply don't want to lose time counting and updating the column and row number of a \snippet{cell\{i\}\{j\}} argument every time we add a row to the table, and keep our styling code easy to read.
 
 Luckily, since version 2025A tabularray offers a class and id mechanism, very similar to how class and id work in HTML: you can give the same class to many cells, but an id only applies to a single cell (if you define the same id several times, only the last definition will be kept in memory).
 
 A class or id name must be lowercase alphabetic, except the first letter of an id that \emph{must} be uppercase. For instance, \snippet{positive} is a valid class name and \snippet{Champion} is a valid id name. \snippet{PRIVATE} or \snippet{top3} are neither valid class or id names.
 
-Each cell can be given a class or id with the command \snippet{\textbackslash SetChild} (and not \snippet{\textbackslash SetCell}!)\footnote{One limitation: \snippet{\textbackslash SetChild} \emph{must} be the first element in a cell, even before \snippet{\textbackslash hline} (writing \snippet{\textbackslash hline} after  \snippet{\textbackslash SetChild} will give the expected result). It also conflicts with slightly complex newline commands  \snippet{\textbackslash\textbackslash[1em]} (or similar), and \snippet{\textbackslash\textbackslash*} if they are written just before (these commands respectively create a newline of size \snippet{1em}, and prevent a page break at this line). Instead, replace these occurrences by \snippet{\textbackslash\textbackslash \, \textbackslash SetRow\{belowsep+=1em\}} and 
+Each cell can be given a class or id with the command \snippet{\textbackslash SetChild} (and not \snippet{\textbackslash SetCell}!)\footnote{One limitation: \snippet{\textbackslash SetChild} \emph{must} be the first element in a cell, even before \snippet{\textbackslash hline} (writing \snippet{\textbackslash hline} after  \snippet{\textbackslash SetChild} will give the expected result). It also conflicts with slightly more complex newline commands  \snippet{\textbackslash\textbackslash[1em]} (or similar), and \snippet{\textbackslash\textbackslash*} if they are written just before (these commands respectively create a newline of size \snippet{1em}, and prevent a page break at this line). Instead, replace these occurrences by \snippet{\textbackslash\textbackslash \, \textbackslash SetRow\{belowsep+=1em\}} and 
 \snippet{\textbackslash\textbackslash \, \textbackslash nopagebreak}. For \snippet{\textbackslash hline}, you can either place it in the header styling, or write it after the \snippet{\textbackslash SetChild} (it will have the desired output). Then, you can give the desired style to your cells in the header.
 }. For instance, you can set a class with \snippet{\textbackslash SetChild\{class=myclass\}}, an id with \snippet{\textbackslash SetChild\{id=Myid\}}. 
 	

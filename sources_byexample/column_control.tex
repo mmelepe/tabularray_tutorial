@@ -15,7 +15,7 @@ Columns are technically all of \snippet{Q} type. A \snippet{Q} column accepts op
 \begin{itemize}
 	\item The horizontal alignment\footnote{A \snippet{Q[l]} column is equivalent to a \snippet{l} column, and so on. However, an \snippet{l} column cannot receive additional arguments, whereas a \snippet{Q} column can: \snippet{Q[l,2cm,f]}.} (\snippet{l}, \snippet{c}, \snippet{r}, \snippet{j}). Default value is \snippet{j}.
 	\item The column width (in the example above, in \snippet{cm} but any length unit, see e.g. \url{https://en.wikibooks.org/wiki/LaTeX/Lengths}, is valid). By default, a column will extend as much as possible so that the text of all its cells fit on one line, which might cause the table to overflow.
-	\item The vertical alignment. The possible values are: \snippet{h} (\textbf{h}ead, positions the text at the top of the cell), \snippet{f} (\textbf{f}oot, positions the text at the bottom of the cell), \snippet{t} (places the baseline of the cell at the \textbf{t}op of the text block), \snippet{m} (places the baseline at the \textbf{m}iddle of the text block), \snippet{b} (places the baseline at the \textbf{b}ottom of the text block). Default value is \snippet{m}.
+	\item The vertical alignment. The possible values are: \snippet{h} (\textbf{h}ead, positions the text at the top of the cell), \snippet{f} (\textbf{f}oot, positions the text at the bottom of the cell), \snippet{t} (places the baseline\footnote{The baseline is the invisible line that is used for vertical alignment between different characters/blocks of text on the same line. In the table given in example, the baseline passes through the middle of the row, and different baseline placements will give different text alignment. \snippet{Q[b]} in the first column places the cell baseline below the \textbf{b}ottom line of text (thus the text is placed above the middle of the row), etc.} of the cell below the \textbf{t}op line of the text block), \snippet{m} (places the baseline at the \textbf{m}iddle of the text block), \snippet{b} (places the baseline below the \textbf{b}ottom line of the text block). Default value is \snippet{m}.
 \end{itemize}
 
 Other options are available, and we will see some of these below.
@@ -26,7 +26,7 @@ Note that \snippet{h} and \snippet{b} options are not equivalent, neither are \s
 \subsection{Multiline cells}
 
 \begin{Code}[show-output]
-\begin{tblr}{lQ[l,m]Q[l,m]}
+\begin{tblr}{lQ[l,\highLight{m}]Q[l,\highLight{m}]}
 	Country & Capital(s)             & Comment \\ \hline
 	Belize  & Belmopan               & N/A \\
 	Bénin   & \highLight{{Porto-Novo \\ Cotonou}} & \highLight{{Official capital \\ De facto administrative capital}}\\
@@ -34,7 +34,7 @@ Note that \snippet{h} and \snippet{b} options are not equivalent, neither are \s
 \end{tblr}
 \end{Code}
 
-Multiline cells are enclosed by \{\}, in which line breaks are indicated by \snippet{\textbackslash\textbackslash}. They can be vertically centered, by selecting the desired alignment in the colspec.
+Multiline cells are enclosed by curly braces \snippet{\{\}}, in which line breaks are indicated by \snippet{\textbackslash\textbackslash}. They can be vertically centered, by selecting the desired alignment in the colspec.
 
 
 \subsection{Variable width column}
@@ -87,11 +87,11 @@ The coefficient in the \snippet{X} column can be any value (possibly decimal). I
 \end{tblr}
 \end{Code}
 
-To merge cells, you have to use the command \snippet{\textbackslash SetCell} and specify the merging within the optional argument. For instance, \snippet{\textbackslash SetCell[r=2]\{\}} says that the cell will span two rows, starting from the current cell. \snippet{\textbackslash SetCell[c=4]\{\}} will span the current cell over 4 columns.
+To merge cells, you have to use the command \snippet{\textbackslash SetCell} and specify the merging within the optional argument. For instance, \snippet{\textbackslash SetCell[r=2]\{\}} says that the cell will span two \textbf{r}ows, starting from the current cell. \snippet{\textbackslash SetCell[c=4]\{\}} will span the current cell over 4 \textbf{c}olumns.
 
 Merged cells must still be specified in the table body with the ampersands \snippet{\&}, even though their contents will be overwritten. Their contents may be empty.
 
-The mandatory argument of \snippet{\textbackslash SetCell[]\{\}} can receive any cell formatting instruction, e.g. a width, horizontal/vertical alignment, etc. For instance, \snippet{\textbackslash SetCell[r=2,c=3]\{r,m,4cm\}} merges the cells on the next 2 rows and 3 columms, and the resulting merged cell will be right aligned, vertically centered, and 4 cm wide.
+The mandatory argument of \snippet{\textbackslash SetCell[]\{\}} can receive any cell formatting instruction, e.g. a width, horizontal/vertical alignment, etc. For instance, \snippet{\textbackslash SetCell[r=2,c=3]\{r,m,4cm\}} merges the cells on the next 2 rows and 3 columms, and the resulting merged cell will be right aligned, vertically centered, and 4 cm wide. It can also remain empty: \snippet{\textbackslash SetCell[c=2]\{\}}.
 
 
 \vfill

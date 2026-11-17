@@ -38,6 +38,8 @@ Cells can also be merged from the header: \snippet{cell\{4\}\{2\} = \{r=2,c=3\}\
 
 \subsection{Style of a row, style of a column}
 
+To apply in the header a style to all cells (\snippet{cells}), to all columns (\snippet{columns}), to all rows (\snippet{rows}), to a specific column (\snippet{column\{\}}) or row (\snippet{row\{\}}).
+
 \begin{Code}[show-output]
 \begin{tblr}{
 	colspec = {rllllll},
@@ -64,10 +66,10 @@ The example above illustrates how priority rules apply to styling: for a given p
 
 \begin{Code}[show-output]
 \begin{tblr}{
-	\highLight{hline{1} = {2-8}{dashed}},
-	\highLight{hline{2-4} = {1-8}{}},
-	\highLight{vline{1} = {2-3}{red, dotted, 2pt}},
-	\highLight{vline{2-9} = {1-3}{green}},
+	\highLight{hline{1} = {2-8}{dashed, 2pt}},
+	\highLight{hline{2-4}},
+	\highLight{vline{1} = {2-3}{red, dotted}},
+	\highLight{vline{2-9} = {green}},
 	colspec = {cccccccc},
 }
        & Monday   & Tuesday  & Wednesday & Thursday  & Friday   & Saturday & Sunday \\
@@ -80,9 +82,14 @@ Similarly to columns and rows, horizontal lines (\snippet{hlines}) and vertical 
 
 Lines can be \snippet{solid} (default), \snippet{dotted} or \snippet{dashed}. Thickness can be personalized (for instance, \snippet{2pt}). 
 
-Lines do not have to run through the whole table. For instance, \snippet{vline\{1\} = \{2-3\}\{red, dotted\}} draws a vertical red line before the first column, from hline index 2 to hline index 3. Note that if a line is partial, the second styling argument must be specified, even if no styling is applied. The default styling instructions for a line are \snippet{1pt, solid, black}.
+The syntax is either: 
+\begin{itemize}
+	\item \snippet{hline\{i\}} (or \snippet{hline\{i\} = \{\}}) that applies default styling (\snippet{1pt, solid, black}) to the whole line(s)
+	\item \snippet{hline\{i\} = \{red\}} that applies the given style to the whole line(s)
+	\item \snippet{hline\{i\} = \{a-b\}\{red\}} that applies the given style to the line(s) from hline index \snippet{a} to \snippet{b}.
+\end{itemize}
 
-You can give the same style to all vlines/hlines: \snippet{hlines = \{green, 2pt\}}.
+You can also declare the same style to all vlines/hlines in one command: \snippet{hlines = \{green, 2pt\}}.
 
 \subsection{Advanced selectors}
 
